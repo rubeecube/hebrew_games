@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>אותיות נופלות - Falling Letters</title>
+    <title>קרב חלל עברי - Hebrew Space Shooter</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -25,11 +25,25 @@
             width: 100%;
             max-width: 800px;
             height: 600px;
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 100%);
             position: relative;
             border-radius: 10px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 50px rgba(102, 126, 234, 0.5);
             overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
 
         .header {
@@ -44,55 +58,76 @@
         }
 
         .stat-box {
-            background: rgba(255,255,255,0.9);
+            background: rgba(102, 126, 234, 0.8);
             padding: 10px 20px;
             border-radius: 20px;
             font-size: 1.2em;
             font-weight: bold;
-            color: #667eea;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .stat-label {
             font-size: 0.7em;
-            color: #999;
+            opacity: 0.8;
             display: block;
             font-weight: normal;
         }
 
-        .falling-letter {
+        .spaceship {
             position: absolute;
-            font-size: 3em;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 50px;
+            z-index: 50;
+        }
+
+        .alien {
+            position: absolute;
+            top: -100px;
+            font-size: 2.5em;
             font-weight: bold;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 15px 20px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.6);
-            z-index: 50;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.6);
+            animation: alienMove 5s linear;
+            z-index: 40;
+        }
+
+        @keyframes alienMove {
+            0% { top: -100px; }
+            100% { top: 100%; }
+        }
+
+        .laser {
+            position: absolute;
+            width: 4px;
+            height: 30px;
+            background: linear-gradient(180deg, #00ff00 0%, #00ff00 50%, transparent 100%);
+            box-shadow: 0 0 10px #00ff00;
+            animation: laserShoot 0.5s linear;
+            z-index: 45;
+        }
+
+        @keyframes laserShoot {
+            from { bottom: 80px; opacity: 1; }
+            to { bottom: 100%; opacity: 0; }
         }
 
         .explosion {
             position: absolute;
             font-size: 4em;
-            animation: explode 0.5s ease-out;
+            animation: explode 0.6s ease-out;
             pointer-events: none;
             z-index: 60;
         }
 
         @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(3); opacity: 0; }
-        }
-
-        .ground-line {
-            position: absolute;
-            bottom: 50px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: rgba(255, 0, 0, 0.5);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            0% { transform: scale(0.5) rotate(0deg); opacity: 1; }
+            100% { transform: scale(2) rotate(360deg); opacity: 0; }
         }
 
         .game-over, .start-screen {
@@ -101,7 +136,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -149,8 +184,8 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255,255,255,0.9);
-            color: #667eea;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
             padding: 10px 20px;
             text-decoration: none;
             border-radius: 20px;
@@ -184,9 +219,13 @@
                 padding: 8px 15px;
             }
 
-            .falling-letter {
-                font-size: 2.5em;
+            .alien {
+                font-size: 2em;
                 padding: 12px 16px;
+            }
+
+            .spaceship {
+                font-size: 40px;
             }
 
             .start-screen h1 {
@@ -219,30 +258,30 @@
         <a href="index.html" class="back-btn">← חזרה (Back)</a>
         
         <div class="start-screen" id="startScreen">
-            <h1>🎯 אותיות נופלות!<br><small style="font-size: 0.5em; opacity: 0.8;">Falling Letters!</small></h1>
+            <h1>🚀 קרב חלל עברי!<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Space Shooter!</small></h1>
             <div class="instructions">
-                <p><strong>הקלידו את האותיות לפני שהן נוגעות בקרקע!</strong><br>
-                <small style="opacity: 0.8;">Type the letters before they hit the ground!</small></p>
-                <p><strong>אותיות נופלות מהשמיים - הקלידו אותן במהירות!</strong><br>
-                <small style="opacity: 0.8;">Letters fall from the sky - type them fast!</small></p>
-                <p><strong>כל אות שנוגעת בקרקע = אתם מפסידים חיים!</strong><br>
-                <small style="opacity: 0.8;">Each letter that hits the ground = you lose a life!</small></p>
+                <p><strong>הקלידו את האות כדי לירות בחייזרים!</strong><br>
+                <small style="opacity: 0.8;">Type the letter to shoot the aliens!</small></p>
+                <p><strong>חייזרים עם אותיות עבריות פולשים מהחלל!</strong><br>
+                <small style="opacity: 0.8;">Aliens with Hebrew letters are invading from space!</small></p>
+                <p><strong>הקלידו במהירות כדי להציל את כדור הארץ!</strong><br>
+                <small style="opacity: 0.8;">Type fast to save Earth!</small></p>
             </div>
             <button onclick="startGame()">התחל משחק (Start Game)</button>
         </div>
 
         <div class="header">
             <div class="stat-box"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
-            <div class="stat-box"><span class="stat-label">Level</span>שלב: <span id="level">1</span></div>
+            <div class="stat-box"><span class="stat-label">Wave</span>גל: <span id="wave">1</span></div>
             <div class="stat-box"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
         </div>
 
-        <div class="ground-line"></div>
+        <div class="spaceship" id="spaceship">🚀</div>
 
         <div class="game-over hidden" id="gameOver">
             <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
             <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
-            <p><strong>שלב:</strong> <span id="finalLevel">1</span><br><small style="opacity: 0.8;">Level Reached</small></p>
+            <p><strong>גל שהגעת:</strong> <span id="finalWave">1</span><br><small style="opacity: 0.8;">Wave Reached</small></p>
             <button onclick="restartGame()">שחק שוב (Play Again)</button>
         </div>
     </div>
@@ -250,24 +289,30 @@
     <script>
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         
+        // Hebrew to English keyboard mapping
+        const hebrewToEnglish = {
+            'ק': 'q', 'ר': 'w', 'א': 'e', 'ט': 'r', 'ו': 't', 'ן': 'y', 'ם': 'u', 'פ': 'i', 'ף': 'p',
+            'ש': 'a', 'ד': 's', 'ג': 'd', 'כ': 'f', 'ע': 'g', 'י': 'h', 'ח': 'j', 'ל': 'k', 'ך': 'l',
+            'ז': 'z', 'ס': 'x', 'ב': 'c', 'ה': 'v', 'נ': 'b', 'מ': 'n', 'צ': 'm', 'ת': ',', 'ץ': '.'
+        };
+        
         let score = 0;
         let lives = 3;
-        let level = 1;
+        let wave = 1;
         let gameActive = false;
         let spawnInterval;
         let spawnRate = 2000;
-        let fallSpeed = 2; // pixels per frame
-        let fallingLetters = []; // Track all falling letters
-        let animationFrameId;
+        let fallSpeed = 5;
 
         const scoreEl = document.getElementById('score');
         const livesEl = document.getElementById('lives');
-        const levelEl = document.getElementById('level');
+        const waveEl = document.getElementById('wave');
         const gameOverScreen = document.getElementById('gameOver');
         const startScreen = document.getElementById('startScreen');
         const finalScoreEl = document.getElementById('finalScore');
-        const finalLevelEl = document.getElementById('finalLevel');
+        const finalWaveEl = document.getElementById('finalWave');
         const gameContainer = document.getElementById('gameContainer');
+        const spaceship = document.getElementById('spaceship');
 
         function getRandomLetter() {
             return hebrewLetters[Math.floor(Math.random() * hebrewLetters.length)];
@@ -277,109 +322,113 @@
             livesEl.textContent = '❤️'.repeat(lives);
         }
 
-        function createFallingLetter() {
+        function createStars() {
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                gameContainer.appendChild(star);
+            }
+        }
+
+        function shootLaser(targetX, targetY) {
+            const laser = document.createElement('div');
+            laser.className = 'laser';
+            laser.style.left = spaceship.offsetLeft + 23 + 'px';
+            laser.style.bottom = '80px';
+            gameContainer.appendChild(laser);
+            
+            setTimeout(() => laser.remove(), 500);
+        }
+
+        function createAlien() {
             if (!gameActive) return;
 
             const letter = getRandomLetter();
-            const letterEl = document.createElement('div');
-            letterEl.className = 'falling-letter';
-            letterEl.textContent = letter;
-            letterEl.dataset.letter = letter;
+            const alien = document.createElement('div');
+            alien.className = 'alien';
+            alien.textContent = letter;
+            alien.dataset.letter = letter;
             
             const randomX = Math.random() * (gameContainer.clientWidth - 100);
-            letterEl.style.left = randomX + 'px';
-            letterEl.style.top = '-100px';
+            alien.style.left = randomX + 'px';
+            alien.style.animationDuration = fallSpeed + 's';
             
-            gameContainer.appendChild(letterEl);
+            gameContainer.appendChild(alien);
 
-            // Add to tracking array
-            fallingLetters.push({
-                element: letterEl,
-                letter: letter,
-                x: randomX,
-                y: -100
-            });
-        }
-
-        function animateLetters() {
-            if (!gameActive) return;
-
-            const groundLevel = gameContainer.clientHeight - 50; // Ground line is at bottom 50px
-
-            // Update all falling letters
-            for (let i = fallingLetters.length - 1; i >= 0; i--) {
-                const letterObj = fallingLetters[i];
-                letterObj.y += fallSpeed;
-                letterObj.element.style.top = letterObj.y + 'px';
-
-                // Check if letter hit ground
-                if (letterObj.y >= groundLevel) {
-                    // Letter hit ground - lose life
+            // Check if alien hit ground
+            setTimeout(() => {
+                if (alien.parentElement && gameActive) {
+                    // Alien reached Earth - lose life
                     lives--;
                     updateLives();
-                    letterObj.element.remove();
-                    fallingLetters.splice(i, 1);
+                    alien.remove();
                     
                     if (lives <= 0) {
                         endGame();
-                        return;
                     }
                 }
-            }
-
-            animationFrameId = requestAnimationFrame(animateLetters);
+            }, fallSpeed * 1000);
         }
 
-        function typeLetterCheck(typedKey) {
+        function shootAlien(typedKey) {
             if (!gameActive) return;
 
-            // Find the lowest letter matching the typed key
-            let foundLetterIndex = -1;
-            let lowestPosition = -1;
+            // Find all aliens with this letter
+            const aliens = document.querySelectorAll('.alien');
+            let foundAlien = null;
+            let lowestPosition = 0;
 
-            for (let i = 0; i < fallingLetters.length; i++) {
-                const letterObj = fallingLetters[i];
-                if (letterObj.letter === typedKey) {
-                    if (letterObj.y > lowestPosition) {
-                        lowestPosition = letterObj.y;
-                        foundLetterIndex = i;
+            // Find the lowest alien matching the typed key (prioritize closest to ground)
+            aliens.forEach(alien => {
+                const alienLetter = alien.dataset.letter;
+                const alienEnglish = hebrewToEnglish[alienLetter];
+                
+                if (typedKey === alienLetter || typedKey === alienEnglish) {
+                    const rect = alien.getBoundingClientRect();
+                    const position = rect.top;
+                    if (position > lowestPosition) {
+                        lowestPosition = position;
+                        foundAlien = alien;
                     }
                 }
-            }
+            });
 
-            if (foundLetterIndex !== -1) {
-                const letterObj = fallingLetters[foundLetterIndex];
+            if (foundAlien) {
+                // Alien destroyed!
+                const rect = foundAlien.getBoundingClientRect();
+                shootLaser(rect.left, rect.top);
                 
-                // Correct letter typed!
-                score += 10;
+                score += 15;
                 scoreEl.textContent = score;
                 
-                // Create explosion effect
+                // Create explosion
                 const explosion = document.createElement('div');
                 explosion.className = 'explosion';
                 explosion.textContent = '💥';
-                explosion.style.left = letterObj.x + 'px';
-                explosion.style.top = letterObj.y + 'px';
+                explosion.style.left = foundAlien.style.left;
+                explosion.style.top = getComputedStyle(foundAlien).top;
                 gameContainer.appendChild(explosion);
                 
-                setTimeout(() => explosion.remove(), 500);
+                setTimeout(() => explosion.remove(), 600);
                 
-                letterObj.element.remove();
-                fallingLetters.splice(foundLetterIndex, 1);
+                foundAlien.remove();
                 
-                // Level up every 100 points
-                if (score % 100 === 0 && score > 0) {
-                    level++;
-                    levelEl.textContent = level;
+                // Next wave every 150 points
+                if (score % 150 === 0 && score > 0) {
+                    wave++;
+                    waveEl.textContent = wave;
                     
                     // Increase difficulty
-                    if (spawnRate > 800) {
-                        spawnRate -= 100;
+                    if (spawnRate > 600) {
+                        spawnRate -= 150;
                         clearInterval(spawnInterval);
-                        spawnInterval = setInterval(createFallingLetter, spawnRate);
+                        spawnInterval = setInterval(createAlien, spawnRate);
                     }
-                    if (fallSpeed < 5) {
-                        fallSpeed += 0.3;
+                    if (fallSpeed > 2.5) {
+                        fallSpeed -= 0.4;
                     }
                 }
             }
@@ -389,39 +438,37 @@
             gameActive = true;
             score = 0;
             lives = 3;
-            level = 1;
+            wave = 1;
             spawnRate = 2000;
-            fallSpeed = 2;
-            fallingLetters = [];
+            fallSpeed = 5;
             
             scoreEl.textContent = score;
-            levelEl.textContent = level;
+            waveEl.textContent = wave;
             updateLives();
             startScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
 
-            // Clear any existing letters
-            document.querySelectorAll('.falling-letter').forEach(l => l.remove());
-            document.querySelectorAll('.explosion').forEach(e => e.remove());
+            // Create stars if not already created
+            if (document.querySelectorAll('.star').length === 0) {
+                createStars();
+            }
 
-            // Start spawning letters
-            spawnInterval = setInterval(createFallingLetter, spawnRate);
-            
-            // Start animation loop
-            animateLetters();
+            // Clear any existing aliens
+            document.querySelectorAll('.alien').forEach(a => a.remove());
+
+            // Start spawning aliens
+            spawnInterval = setInterval(createAlien, spawnRate);
         }
 
         function endGame() {
             gameActive = false;
             clearInterval(spawnInterval);
-            cancelAnimationFrame(animationFrameId);
             
-            // Remove all falling letters
-            document.querySelectorAll('.falling-letter, .explosion').forEach(l => l.remove());
-            fallingLetters = [];
+            // Remove all aliens
+            document.querySelectorAll('.alien, .explosion, .laser').forEach(el => el.remove());
             
             finalScoreEl.textContent = score;
-            finalLevelEl.textContent = level;
+            finalWaveEl.textContent = wave;
             gameOverScreen.classList.remove('hidden');
         }
 
@@ -432,12 +479,12 @@
         // Keyboard event listener
         document.addEventListener('keypress', (e) => {
             if (!gameActive) return;
-            typeLetterCheck(e.key);
+            shootAlien(e.key);
         });
 
         document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
-            typeLetterCheck(e.key);
+            shootAlien(e.key);
         });
     </script>
 </body>

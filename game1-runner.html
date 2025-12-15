@@ -87,13 +87,27 @@
             bottom: 110px;
             right: 100px;
             width: 50px;
-            height: 50px;
+            height: 55px;
             font-size: 50px;
             transition: bottom 0.2s ease;
+            animation: running 0.4s steps(2) infinite;
         }
 
         .player.jumping {
             bottom: 240px;
+            animation: running 0.4s steps(2) infinite;
+        }
+
+        @keyframes running {
+            0% {
+                transform: translateY(0px) scaleY(1);
+            }
+            50% {
+                transform: translateY(-3px) scaleY(1.05);
+            }
+            100% {
+                transform: translateY(0px) scaleY(0.95);
+            }
         }
 
         .obstacle {
@@ -106,10 +120,11 @@
             padding: 10px 15px;
             border-radius: 10px;
             animation: moveLeft 4s linear;
+            z-index: 10;
         }
 
         @keyframes moveLeft {
-            from { left: -100px; }
+            from { left: 0%; }
             to { left: 100%; }
         }
 
@@ -379,11 +394,11 @@
         function createMobileButtons() {
             mobileControls.innerHTML = '';
             
-            // Hebrew keyboard layout (right to left on each row)
+            // Hebrew keyboard layout (as it appears on physical keyboard, left to right)
             const keyboardRows = [
-                ['ק', 'ר', 'א', 'ט', 'ו', 'ן', 'ם', 'פ'],
-                ['ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל', 'ך', 'ף'],
-                ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת', 'ץ']
+                ['פ', 'ם', 'ן', 'ו', 'ט', 'א', 'ר', 'ק'],
+                ['ף', 'ך', 'ל', 'ח', 'י', 'ע', 'כ', 'ג', 'ד', 'ש'],
+                ['ץ', 'ת', 'צ', 'מ', 'נ', 'ה', 'ב', 'ס', 'ז']
             ];
             
             keyboardRows.forEach(row => {
