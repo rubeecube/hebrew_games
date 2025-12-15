@@ -503,8 +503,8 @@
         let obstacleInterval;
         let coinInterval;
         let changeKeyInterval;
-        let gameSpeed = 2000;
-        let animationSpeed = 3;
+        let gameSpeed = 2500;
+        let animationSpeed = 4;
         
         let leftKey = '';
         let centerKey = '';
@@ -841,8 +841,8 @@
             gameActive = true;
             score = 0;
             lives = 3;
-            gameSpeed = 2000;
-            animationSpeed = 3;
+            gameSpeed = 2500;
+            animationSpeed = 4;
             currentLane = 'center';
             
             scoreEl.textContent = score;
@@ -863,20 +863,20 @@
             obstacleInterval = setInterval(() => {
                 createObstacle();
                 
-                // Gradually increase difficulty
-                if (animationSpeed > 1.5) {
-                    animationSpeed -= 0.05;
+                // Gradually increase difficulty (slower progression)
+                if (animationSpeed > 2.5) {
+                    animationSpeed -= 0.03;
                     updateSpeed();
                 }
-                if (gameSpeed > 1000) {
-                    gameSpeed -= 20;
+                if (gameSpeed > 1500) {
+                    gameSpeed -= 15;
                 }
             }, gameSpeed);
 
             // Create coins periodically
             coinInterval = setInterval(() => {
                 createCoin();
-            }, 1500);
+            }, 2000);
 
             // Change one key every 5 seconds
             changeKeyInterval = setInterval(() => {
