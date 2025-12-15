@@ -196,42 +196,52 @@
         }
 
         .mobile-controls {
-            position: absolute;
-            bottom: 250px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: none;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            max-width: 90%;
+            flex-direction: column;
+            background: rgba(40, 40, 40, 0.95);
+            padding: 10px;
+            gap: 5px;
             z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
         }
 
         .mobile-key-btn {
             background: rgba(255,255,255,0.9);
-            border: 3px solid #667eea;
-            padding: 15px 20px;
-            font-size: 2em;
+            border: 2px solid #667eea;
+            padding: 12px 8px;
+            font-size: 1.3em;
             font-weight: bold;
             color: #667eea;
-            border-radius: 15px;
+            border-radius: 8px;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            min-width: 60px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            min-width: 35px;
             text-align: center;
+            flex: 1;
+            max-width: 50px;
         }
 
-        .mobile-key-btn:active {
-            transform: scale(0.95);
+        .mobile-key-btn:active,
+        .mobile-key-btn.active-key {
             background: #667eea;
             color: white;
+            transform: scale(0.95);
         }
 
         @media (max-width: 768px) {
             .mobile-controls {
-                display: flex;
+                display: flex !important;
             }
 
             .game-container {
@@ -354,63 +364,84 @@
 
         function createMobileButtons() {
             mobileControls.innerHTML = '';
-            hebrewLetters.forEach(letter => {
-                const btn = document.createElement('button');
-                btn.className = 'mobile-key-btn';
-                btn.textContent = letter;
+            
+            // Hebrew keyboard layout (right to left on each row)
+            const keyboardRows = [
+                ['ק', 'ר', 'א', 'ט', 'ו', 'ן', 'ם', 'פ'],
+                ['ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל', 'ך', 'ף'],
+                ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת', 'ץ']
+            ];
+            
+            keyboardRows.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
                 
-                // Touch start - begin jump
-                btn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    if (!gameActive) return;
-                    currentPressedKey = letter;
-                    isKeyPressed = true;
-                    if (letter === currentLetter) {
-                        jump();
-                    }
+                row.forEach(letter => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mobile-key-btn';
+                    btn.textContent = letter;
+                    btn.dataset.key = letter;
+                    
+                    // Touch start - begin jump
+                    btn.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        if (!gameActive) return;
+                        currentPressedKey = letter;
+                        isKeyPressed = true;
+                        btn.classList.add('active-key');
+                        if (letter === currentLetter) {
+                            jump();
+                        }
+                    });
+                    
+                    // Touch end - stop jump
+                    btn.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        btn.classList.remove('active-key');
+                        if (currentPressedKey === letter) {
+                            isKeyPressed = false;
+                            currentPressedKey = '';
+                            stopJump();
+                        }
+                    });
+                    
+                    // Mouse down - begin jump
+                    btn.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        if (!gameActive) return;
+                        currentPressedKey = letter;
+                        isKeyPressed = true;
+                        btn.classList.add('active-key');
+                        if (letter === currentLetter) {
+                            jump();
+                        }
+                    });
+                    
+                    // Mouse up - stop jump
+                    btn.addEventListener('mouseup', (e) => {
+                        e.preventDefault();
+                        btn.classList.remove('active-key');
+                        if (currentPressedKey === letter) {
+                            isKeyPressed = false;
+                            currentPressedKey = '';
+                            stopJump();
+                        }
+                    });
+                    
+                    // Mouse leave - stop jump if dragged out
+                    btn.addEventListener('mouseleave', (e) => {
+                        btn.classList.remove('active-key');
+                        if (currentPressedKey === letter) {
+                            isKeyPressed = false;
+                            currentPressedKey = '';
+                            stopJump();
+                        }
+                    });
+                    
+                    rowDiv.appendChild(btn);
                 });
                 
-                // Touch end - stop jump
-                btn.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    if (currentPressedKey === letter) {
-                        isKeyPressed = false;
-                        currentPressedKey = '';
-                        stopJump();
-                    }
-                });
-                
-                // Mouse down - begin jump
-                btn.addEventListener('mousedown', (e) => {
-                    e.preventDefault();
-                    if (!gameActive) return;
-                    currentPressedKey = letter;
-                    isKeyPressed = true;
-                    if (letter === currentLetter) {
-                        jump();
-                    }
-                });
-                
-                // Mouse up - stop jump
-                btn.addEventListener('mouseup', (e) => {
-                    e.preventDefault();
-                    if (currentPressedKey === letter) {
-                        isKeyPressed = false;
-                        currentPressedKey = '';
-                        stopJump();
-                    }
-                });
-                
-                // Mouse leave - stop jump if dragged out
-                btn.addEventListener('mouseleave', (e) => {
-                    if (currentPressedKey === letter) {
-                        isKeyPressed = false;
-                        currentPressedKey = '';
-                        stopJump();
-                    }
-                });
-                
-                mobileControls.appendChild(btn);
+                mobileControls.appendChild(rowDiv);
             });
         }
 

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # משחקי תרגול עברית - Hebrew Typing Games
 
 Three fun HTML5 games to improve your Hebrew typing skills!
@@ -86,7 +85,3 @@ Feel free to fork and improve the games!
 ---
 
 Made with ❤️ for Hebrew learners
-
-=======
-# hebrew_games
->>>>>>> 642ff19380e168a0a3d1f09cd529f57028369a23

@@ -307,39 +307,67 @@
         }
 
         .mobile-car-controls {
-            position: absolute;
-            bottom: 200px;
-            left: 50%;
-            transform: translateX(-50%);
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
             display: none;
-            gap: 15px;
+            flex-direction: column;
+            background: rgba(40, 40, 40, 0.95);
+            padding: 10px;
+            gap: 5px;
             z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
         }
 
-        .mobile-car-btn {
+        .keyboard-row {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .mobile-key-btn {
             background: rgba(255,255,255,0.9);
-            border: 3px solid #667eea;
-            padding: 20px;
-            font-size: 1.5em;
+            border: 2px solid #667eea;
+            padding: 12px 8px;
+            font-size: 1.3em;
             font-weight: bold;
             color: #667eea;
-            border-radius: 15px;
+            border-radius: 8px;
             cursor: pointer;
             user-select: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            min-width: 100px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            min-width: 35px;
             text-align: center;
+            flex: 1;
+            max-width: 50px;
         }
 
-        .mobile-car-btn:active {
-            transform: scale(0.95);
+        .mobile-key-btn:active,
+        .mobile-key-btn.active-key {
             background: #667eea;
             color: white;
+            transform: scale(0.95);
+        }
+
+        .mobile-key-btn.highlight-left {
+            background: rgba(255, 100, 100, 0.9);
+            border-color: #e74c3c;
+        }
+
+        .mobile-key-btn.highlight-center {
+            background: rgba(100, 255, 100, 0.9);
+            border-color: #27ae60;
+        }
+
+        .mobile-key-btn.highlight-right {
+            background: rgba(100, 150, 255, 0.9);
+            border-color: #3498db;
         }
 
         @media (max-width: 768px) {
             .mobile-car-controls {
-                display: flex;
+                display: flex !important;
             }
 
             .game-container {
@@ -364,8 +392,8 @@
             }
 
             .key-display {
-                bottom: 320px;
-                padding: 10px 20px;
+                bottom: 180px;
+                padding: 8px 15px;
             }
 
             .key-instruction {
@@ -448,18 +476,7 @@
         <div class="car center-lane" id="car">🚗</div>
 
         <div class="mobile-car-controls" id="mobileCarControls">
-            <button class="mobile-car-btn" id="leftBtn">
-                <div><span id="leftKeyMobile">-</span></div>
-                <div style="font-size: 0.8em;">⬅️ שמאל</div>
-            </button>
-            <button class="mobile-car-btn" id="centerBtn">
-                <div><span id="centerKeyMobile">-</span></div>
-                <div style="font-size: 0.8em;">⬆️ מרכז</div>
-            </button>
-            <button class="mobile-car-btn" id="rightBtn">
-                <div><span id="rightKeyMobile">-</span></div>
-                <div style="font-size: 0.8em;">➡️ ימין</div>
-            </button>
+            <!-- Keyboard will be generated here -->
         </div>
 
         <div class="game-over hidden" id="gameOver">
@@ -504,12 +521,7 @@
         const leftKeyEl = document.getElementById('leftKey');
         const centerKeyEl = document.getElementById('centerKey');
         const rightKeyEl = document.getElementById('rightKey');
-        const leftKeyMobile = document.getElementById('leftKeyMobile');
-        const centerKeyMobile = document.getElementById('centerKeyMobile');
-        const rightKeyMobile = document.getElementById('rightKeyMobile');
-        const leftBtn = document.getElementById('leftBtn');
-        const centerBtn = document.getElementById('centerBtn');
-        const rightBtn = document.getElementById('rightBtn');
+        const mobileCarControls = document.getElementById('mobileCarControls');
 
         function getRandomLetter() {
             return hebrewLetters[Math.floor(Math.random() * hebrewLetters.length)];
@@ -545,6 +557,75 @@
             return selectedGroup.sort(() => Math.random() - 0.5);
         }
 
+        function createMobileKeyboard() {
+            mobileCarControls.innerHTML = '';
+            
+            // Hebrew keyboard layout (right to left on each row)
+            const keyboardRows = [
+                ['ק', 'ר', 'א', 'ט', 'ו', 'ן', 'ם', 'פ'],
+                ['ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל', 'ך', 'ף'],
+                ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת', 'ץ']
+            ];
+            
+            keyboardRows.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+                
+                row.forEach(letter => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mobile-key-btn';
+                    btn.textContent = letter;
+                    btn.dataset.key = letter;
+                    
+                    // Touch start
+                    btn.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        if (!gameActive) return;
+                        handleKeyPress(letter);
+                    });
+                    
+                    // Click
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        if (!gameActive) return;
+                        handleKeyPress(letter);
+                    });
+                    
+                    rowDiv.appendChild(btn);
+                });
+                
+                mobileCarControls.appendChild(rowDiv);
+            });
+        }
+
+        function handleKeyPress(letter) {
+            if (letter === leftKey) {
+                moveCar('left');
+            } else if (letter === centerKey) {
+                moveCar('center');
+            } else if (letter === rightKey) {
+                moveCar('right');
+            }
+        }
+
+        function highlightKeyboardKeys() {
+            // Remove all highlights
+            document.querySelectorAll('.mobile-key-btn').forEach(btn => {
+                btn.classList.remove('highlight-left', 'highlight-center', 'highlight-right');
+            });
+            
+            // Add highlights for current keys
+            document.querySelectorAll('.mobile-key-btn').forEach(btn => {
+                if (btn.dataset.key === leftKey) {
+                    btn.classList.add('highlight-left');
+                } else if (btn.dataset.key === centerKey) {
+                    btn.classList.add('highlight-center');
+                } else if (btn.dataset.key === rightKey) {
+                    btn.classList.add('highlight-right');
+                }
+            });
+        }
+
         function assignKeys() {
             const keys = getCloseKeys();
             leftKey = keys[0];
@@ -555,10 +636,8 @@
             centerKeyEl.textContent = centerKey;
             rightKeyEl.textContent = rightKey;
             
-            // Update mobile buttons
-            leftKeyMobile.textContent = leftKey;
-            centerKeyMobile.textContent = centerKey;
-            rightKeyMobile.textContent = rightKey;
+            // Highlight on mobile keyboard
+            highlightKeyboardKeys();
         }
 
         function findCloseKeyTo(key1, key2) {
@@ -643,7 +722,7 @@
             // Change the key after first blink
             setTimeout(() => {
                 keyEl.textContent = newLetter;
-                keyElMobile.textContent = newLetter;
+                highlightKeyboardKeys();
             }, 250);
             
             // Remove blink class after animation
@@ -769,6 +848,12 @@
             scoreEl.textContent = score;
             updateLives();
             updateSpeed();
+            
+            // Create mobile keyboard if not already created
+            if (mobileCarControls.children.length === 0) {
+                createMobileKeyboard();
+            }
+            
             assignKeys();
             moveCar('center');
             startScreen.classList.add('hidden');
@@ -836,42 +921,7 @@
             if (!gameActive) return;
             
             const pressedKey = e.key;
-            
-            if (pressedKey === leftKey) {
-                moveCar('left');
-            } else if (pressedKey === centerKey) {
-                moveCar('center');
-            } else if (pressedKey === rightKey) {
-                moveCar('right');
-            }
-        });
-
-        // Mobile touch controls
-        leftBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('left');
-        });
-        leftBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('left');
-        });
-
-        centerBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('center');
-        });
-        centerBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('center');
-        });
-
-        rightBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('right');
-        });
-        rightBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (gameActive) moveCar('right');
+            handleKeyPress(pressedKey);
         });
     </script>
 </body>
