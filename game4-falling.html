@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>אותיות נופלות - Falling Letters</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 30px;
+            z-index: 100;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.9);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .stat-label {
+            font-size: 0.7em;
+            color: #999;
+            display: block;
+            font-weight: normal;
+        }
+
+        .falling-letter {
+            position: absolute;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.6);
+            animation: fall linear;
+            z-index: 50;
+        }
+
+        @keyframes fall {
+            from { top: -100px; }
+            to { top: 600px; }
+        }
+
+        .explosion {
+            position: absolute;
+            font-size: 4em;
+            animation: explode 0.5s ease-out;
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+
+        .ground-line {
+            position: absolute;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        .game-over, .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            overflow-y: auto;
+            padding: 20px 10px;
+        }
+
+        .game-over.hidden, .start-screen.hidden {
+            display: none;
+        }
+
+        .game-over h1, .start-screen h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .game-over p, .start-screen p {
+            color: white;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.3em;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 100;
+        }
+
+        .instructions {
+            color: white;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                height: 100vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .header {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .stat-box {
+                font-size: 1em;
+                padding: 8px 15px;
+            }
+
+            .falling-letter {
+                font-size: 2.5em;
+                padding: 12px 16px;
+            }
+
+            .start-screen h1 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+
+            .instructions {
+                font-size: 0.85em;
+                line-height: 1.4;
+                margin-bottom: 10px;
+            }
+
+            button {
+                font-size: 1.1em;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="gameContainer">
+        <a href="index.html" class="back-btn">← חזרה (Back)</a>
+        
+        <div class="start-screen" id="startScreen">
+            <h1>🎯 אותיות נופלות!<br><small style="font-size: 0.5em; opacity: 0.8;">Falling Letters!</small></h1>
+            <div class="instructions">
+                <p><strong>הקלידו את האותיות לפני שהן נוגעות בקרקע!</strong><br>
+                <small style="opacity: 0.8;">Type the letters before they hit the ground!</small></p>
+                <p><strong>אותיות נופלות מהשמיים - הקלידו אותן במהירות!</strong><br>
+                <small style="opacity: 0.8;">Letters fall from the sky - type them fast!</small></p>
+                <p><strong>כל אות שנוגעת בקרקע = אתם מפסידים חיים!</strong><br>
+                <small style="opacity: 0.8;">Each letter that hits the ground = you lose a life!</small></p>
+            </div>
+            <button onclick="startGame()">התחל משחק (Start Game)</button>
+        </div>
+
+        <div class="header">
+            <div class="stat-box"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
+            <div class="stat-box"><span class="stat-label">Level</span>שלב: <span id="level">1</span></div>
+            <div class="stat-box"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
+        </div>
+
+        <div class="ground-line"></div>
+
+        <div class="game-over hidden" id="gameOver">
+            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
+            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
+            <p><strong>שלב:</strong> <span id="finalLevel">1</span><br><small style="opacity: 0.8;">Level Reached</small></p>
+            <button onclick="restartGame()">שחק שוב (Play Again)</button>
+        </div>
+    </div>
+
+    <script>
+        const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
+        
+        let score = 0;
+        let lives = 3;
+        let level = 1;
+        let gameActive = false;
+        let spawnInterval;
+        let spawnRate = 2000;
+        let fallSpeed = 6;
+
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+        const levelEl = document.getElementById('level');
+        const gameOverScreen = document.getElementById('gameOver');
+        const startScreen = document.getElementById('startScreen');
+        const finalScoreEl = document.getElementById('finalScore');
+        const finalLevelEl = document.getElementById('finalLevel');
+        const gameContainer = document.getElementById('gameContainer');
+
+        function getRandomLetter() {
+            return hebrewLetters[Math.floor(Math.random() * hebrewLetters.length)];
+        }
+
+        function updateLives() {
+            livesEl.textContent = '❤️'.repeat(lives);
+        }
+
+        function createFallingLetter() {
+            if (!gameActive) return;
+
+            const letter = getRandomLetter();
+            const letterEl = document.createElement('div');
+            letterEl.className = 'falling-letter';
+            letterEl.textContent = letter;
+            letterEl.dataset.letter = letter;
+            
+            const randomX = Math.random() * (gameContainer.clientWidth - 100);
+            letterEl.style.left = randomX + 'px';
+            letterEl.style.animationDuration = fallSpeed + 's';
+            
+            gameContainer.appendChild(letterEl);
+
+            // Check if letter hit ground
+            setTimeout(() => {
+                if (letterEl.parentElement && gameActive) {
+                    // Letter hit ground - lose life
+                    lives--;
+                    updateLives();
+                    letterEl.remove();
+                    
+                    if (lives <= 0) {
+                        endGame();
+                    }
+                }
+            }, fallSpeed * 1000);
+        }
+
+        function typeLetterCheck(typedKey) {
+            if (!gameActive) return;
+
+            // Find all falling letters with this character
+            const fallingLetters = document.querySelectorAll('.falling-letter');
+            let foundLetter = null;
+            let lowestPosition = 0;
+
+            // Find the lowest letter matching the typed key
+            fallingLetters.forEach(letterEl => {
+                if (letterEl.dataset.letter === typedKey) {
+                    const position = parseInt(letterEl.style.top || 0);
+                    if (position > lowestPosition) {
+                        lowestPosition = position;
+                        foundLetter = letterEl;
+                    }
+                }
+            });
+
+            if (foundLetter) {
+                // Correct letter typed!
+                score += 10;
+                scoreEl.textContent = score;
+                
+                // Create explosion effect
+                const explosion = document.createElement('div');
+                explosion.className = 'explosion';
+                explosion.textContent = '💥';
+                explosion.style.left = foundLetter.style.left;
+                explosion.style.top = foundLetter.style.top;
+                gameContainer.appendChild(explosion);
+                
+                setTimeout(() => explosion.remove(), 500);
+                
+                foundLetter.remove();
+                
+                // Level up every 100 points
+                if (score % 100 === 0 && score > 0) {
+                    level++;
+                    levelEl.textContent = level;
+                    
+                    // Increase difficulty
+                    if (spawnRate > 800) {
+                        spawnRate -= 100;
+                        clearInterval(spawnInterval);
+                        spawnInterval = setInterval(createFallingLetter, spawnRate);
+                    }
+                    if (fallSpeed > 3) {
+                        fallSpeed -= 0.3;
+                    }
+                }
+            }
+        }
+
+        function startGame() {
+            gameActive = true;
+            score = 0;
+            lives = 3;
+            level = 1;
+            spawnRate = 2000;
+            fallSpeed = 6;
+            
+            scoreEl.textContent = score;
+            levelEl.textContent = level;
+            updateLives();
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+
+            // Clear any existing letters
+            document.querySelectorAll('.falling-letter').forEach(l => l.remove());
+
+            // Start spawning letters
+            spawnInterval = setInterval(createFallingLetter, spawnRate);
+        }
+
+        function endGame() {
+            gameActive = false;
+            clearInterval(spawnInterval);
+            
+            // Remove all falling letters
+            document.querySelectorAll('.falling-letter, .explosion').forEach(l => l.remove());
+            
+            finalScoreEl.textContent = score;
+            finalLevelEl.textContent = level;
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        function restartGame() {
+            startGame();
+        }
+
+        // Keyboard event listener
+        document.addEventListener('keypress', (e) => {
+            if (!gameActive) return;
+            typeLetterCheck(e.key);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            typeLetterCheck(e.key);
+        });
+    </script>
+</body>
+</html>
+
