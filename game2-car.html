@@ -470,6 +470,13 @@
     </div>
 
     <script>
+        // Hebrew keyboard layout (by rows, as they appear on keyboard)
+        const hebrewKeyboard = [
+            ['ק', 'ר', 'א', 'ט', 'ו', 'ן', 'ם', 'פ'], // top row
+            ['ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל'], // middle row
+            ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת']  // bottom row
+        ];
+        
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         
         let score = 0;
@@ -513,11 +520,36 @@
             return lanes[Math.floor(Math.random() * lanes.length)];
         }
 
+        function getCloseKeys() {
+            // Get all possible groups of 3 close keys (max 1 space between them)
+            const keyGroups = [];
+            
+            hebrewKeyboard.forEach(row => {
+                // For each row, get consecutive groups of 3 keys (including those with 1 space)
+                for (let i = 0; i < row.length - 2; i++) {
+                    // Direct neighbors: positions i, i+1, i+2
+                    keyGroups.push([row[i], row[i+1], row[i+2]]);
+                    
+                    // With one space: positions i, i+1, i+3 (skip i+2)
+                    if (i < row.length - 3) {
+                        keyGroups.push([row[i], row[i+1], row[i+3]]);
+                        keyGroups.push([row[i], row[i+2], row[i+3]]);
+                    }
+                }
+            });
+            
+            // Pick a random group
+            const selectedGroup = keyGroups[Math.floor(Math.random() * keyGroups.length)];
+            
+            // Shuffle the three keys within the group
+            return selectedGroup.sort(() => Math.random() - 0.5);
+        }
+
         function assignKeys() {
-            const shuffled = [...hebrewLetters].sort(() => Math.random() - 0.5);
-            leftKey = shuffled[0];
-            centerKey = shuffled[1];
-            rightKey = shuffled[2];
+            const keys = getCloseKeys();
+            leftKey = keys[0];
+            centerKey = keys[1];
+            rightKey = keys[2];
             
             leftKeyEl.textContent = leftKey;
             centerKeyEl.textContent = centerKey;
@@ -529,6 +561,37 @@
             rightKeyMobile.textContent = rightKey;
         }
 
+        function findCloseKeyTo(key1, key2) {
+            // Find a key that's close to both key1 and key2
+            const closeKeys = [];
+            
+            hebrewKeyboard.forEach(row => {
+                const idx1 = row.indexOf(key1);
+                const idx2 = row.indexOf(key2);
+                
+                if (idx1 !== -1 && idx2 !== -1) {
+                    // Both keys are in this row, find keys near them
+                    const minIdx = Math.min(idx1, idx2);
+                    const maxIdx = Math.max(idx1, idx2);
+                    
+                    // Add keys within range
+                    for (let i = Math.max(0, minIdx - 2); i <= Math.min(row.length - 1, maxIdx + 2); i++) {
+                        if (row[i] !== key1 && row[i] !== key2) {
+                            closeKeys.push(row[i]);
+                        }
+                    }
+                }
+            });
+            
+            // If we found close keys, pick one randomly
+            if (closeKeys.length > 0) {
+                return closeKeys[Math.floor(Math.random() * closeKeys.length)];
+            }
+            
+            // Fallback: just get a new set of keys
+            return null;
+        }
+
         function changeOneKey() {
             if (!gameActive) return;
             
@@ -536,11 +599,27 @@
             const positions = ['left', 'center', 'right'];
             const positionToChange = positions[Math.floor(Math.random() * positions.length)];
             
-            // Get a new letter that's different from all current keys
-            let newLetter;
-            do {
-                newLetter = getRandomLetter();
-            } while (newLetter === leftKey || newLetter === centerKey || newLetter === rightKey);
+            // Get the two keys that will stay the same
+            let key1, key2;
+            if (positionToChange === 'left') {
+                key1 = centerKey;
+                key2 = rightKey;
+            } else if (positionToChange === 'center') {
+                key1 = leftKey;
+                key2 = rightKey;
+            } else {
+                key1 = leftKey;
+                key2 = centerKey;
+            }
+            
+            // Find a new key close to the other two
+            let newLetter = findCloseKeyTo(key1, key2);
+            
+            // If no close key found, reassign all keys
+            if (!newLetter) {
+                assignKeys();
+                return;
+            }
             
             // Get the element and add blink animation
             let keyEl, keyElMobile;
