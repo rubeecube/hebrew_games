@@ -303,6 +303,77 @@
             line-height: 1.8;
             margin-bottom: 20px;
         }
+
+        .mobile-car-controls {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .mobile-car-btn {
+            background: rgba(255,255,255,0.9);
+            border: 3px solid #667eea;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            min-width: 100px;
+            text-align: center;
+        }
+
+        .mobile-car-btn:active {
+            transform: scale(0.95);
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-car-controls {
+                display: flex;
+            }
+
+            .game-container {
+                height: 100vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .header {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .score, .lives, .speed {
+                font-size: 1em;
+                padding: 8px 15px;
+            }
+
+            .stat-label {
+                font-size: 0.6em;
+            }
+
+            .key-display {
+                bottom: 320px;
+                padding: 10px 20px;
+            }
+
+            .key-instruction {
+                font-size: 1em;
+            }
+
+            .key-option {
+                font-size: 1.5em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -348,6 +419,21 @@
 
         <div class="car center-lane" id="car">🚗</div>
 
+        <div class="mobile-car-controls" id="mobileCarControls">
+            <button class="mobile-car-btn" id="leftBtn">
+                <div><span id="leftKeyMobile">-</span></div>
+                <div style="font-size: 0.8em;">⬅️ שמאל</div>
+            </button>
+            <button class="mobile-car-btn" id="centerBtn">
+                <div><span id="centerKeyMobile">-</span></div>
+                <div style="font-size: 0.8em;">⬆️ מרכז</div>
+            </button>
+            <button class="mobile-car-btn" id="rightBtn">
+                <div><span id="rightKeyMobile">-</span></div>
+                <div style="font-size: 0.8em;">➡️ ימין</div>
+            </button>
+        </div>
+
         <div class="game-over hidden" id="gameOver">
             <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
             <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
@@ -383,6 +469,12 @@
         const leftKeyEl = document.getElementById('leftKey');
         const centerKeyEl = document.getElementById('centerKey');
         const rightKeyEl = document.getElementById('rightKey');
+        const leftKeyMobile = document.getElementById('leftKeyMobile');
+        const centerKeyMobile = document.getElementById('centerKeyMobile');
+        const rightKeyMobile = document.getElementById('rightKeyMobile');
+        const leftBtn = document.getElementById('leftBtn');
+        const centerBtn = document.getElementById('centerBtn');
+        const rightBtn = document.getElementById('rightBtn');
 
         function getRandomLetter() {
             return hebrewLetters[Math.floor(Math.random() * hebrewLetters.length)];
@@ -402,6 +494,11 @@
             leftKeyEl.textContent = leftKey;
             centerKeyEl.textContent = centerKey;
             rightKeyEl.textContent = rightKey;
+            
+            // Update mobile buttons
+            leftKeyMobile.textContent = leftKey;
+            centerKeyMobile.textContent = centerKey;
+            rightKeyMobile.textContent = rightKey;
         }
 
         function changeOneKey() {
@@ -418,15 +515,18 @@
             } while (newLetter === leftKey || newLetter === centerKey || newLetter === rightKey);
             
             // Get the element and add blink animation
-            let keyEl;
+            let keyEl, keyElMobile;
             if (positionToChange === 'left') {
                 keyEl = leftKeyEl;
+                keyElMobile = leftKeyMobile;
                 leftKey = newLetter;
             } else if (positionToChange === 'center') {
                 keyEl = centerKeyEl;
+                keyElMobile = centerKeyMobile;
                 centerKey = newLetter;
             } else {
                 keyEl = rightKeyEl;
+                keyElMobile = rightKeyMobile;
                 rightKey = newLetter;
             }
             
@@ -436,6 +536,7 @@
             // Change the key after first blink
             setTimeout(() => {
                 keyEl.textContent = newLetter;
+                keyElMobile.textContent = newLetter;
             }, 250);
             
             // Remove blink class after animation
@@ -636,6 +737,34 @@
             } else if (pressedKey === rightKey) {
                 moveCar('right');
             }
+        });
+
+        // Mobile touch controls
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('left');
+        });
+        leftBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('left');
+        });
+
+        centerBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('center');
+        });
+        centerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('center');
+        });
+
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('right');
+        });
+        rightBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (gameActive) moveCar('right');
         });
     </script>
 </body>

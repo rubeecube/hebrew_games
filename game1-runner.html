@@ -197,6 +197,67 @@
             line-height: 1.8;
             margin-bottom: 20px;
         }
+
+        .mobile-controls {
+            position: absolute;
+            bottom: 250px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            max-width: 90%;
+            z-index: 100;
+        }
+
+        .mobile-key-btn {
+            background: rgba(255,255,255,0.9);
+            border: 3px solid #667eea;
+            padding: 15px 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .mobile-key-btn:active {
+            transform: scale(0.95);
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-controls {
+                display: flex;
+            }
+
+            .game-container {
+                height: 100vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .score, .lives, .target-letter {
+                font-size: 1em;
+                padding: 8px 15px;
+            }
+
+            .stat-label {
+                font-size: 0.6em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -230,6 +291,10 @@
 
         <div class="player" id="player">🏃</div>
 
+        <div class="mobile-controls" id="mobileControls">
+            <!-- Keys will be added dynamically -->
+        </div>
+
         <div class="ground">
             <div class="grass"></div>
         </div>
@@ -260,6 +325,31 @@
         const startScreen = document.getElementById('startScreen');
         const finalScoreEl = document.getElementById('finalScore');
         const gameContainer = document.querySelector('.game-container');
+        const mobileControls = document.getElementById('mobileControls');
+
+        function createMobileButtons() {
+            mobileControls.innerHTML = '';
+            hebrewLetters.forEach(letter => {
+                const btn = document.createElement('button');
+                btn.className = 'mobile-key-btn';
+                btn.textContent = letter;
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (!gameActive) return;
+                    if (letter === currentLetter) {
+                        jump();
+                    }
+                });
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!gameActive) return;
+                    if (letter === currentLetter) {
+                        jump();
+                    }
+                });
+                mobileControls.appendChild(btn);
+            });
+        }
 
         function getRandomLetter() {
             return hebrewLetters[Math.floor(Math.random() * hebrewLetters.length)];
@@ -348,6 +438,11 @@
             updateLives();
             startScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
+            
+            // Create mobile buttons if not already created
+            if (mobileControls.children.length === 0) {
+                createMobileButtons();
+            }
 
             // Create obstacles periodically
             obstacleInterval = setInterval(() => {

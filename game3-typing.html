@@ -301,6 +301,95 @@
             background: rgba(255,255,255,0.3);
             border-color: white;
         }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .game-container {
+                padding: 20px;
+            }
+
+            .header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .stat-box {
+                font-size: 1em;
+                padding: 10px 15px;
+                flex: 1 1 45%;
+            }
+
+            .stat-label {
+                font-size: 0.65em;
+            }
+
+            .sentence-text {
+                font-size: 1.3em;
+            }
+
+            .translation-text {
+                font-size: 0.9em;
+            }
+
+            .typing-input {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px 25px;
+                font-size: 1.1em;
+            }
+
+            .stats-summary {
+                min-width: auto;
+                width: 95%;
+                padding: 20px;
+            }
+
+            .stat-row {
+                font-size: 1.1em;
+                flex-direction: column;
+                text-align: center;
+                gap: 5px;
+            }
+
+            .start-screen h1 {
+                font-size: 2em;
+            }
+
+            .instructions {
+                font-size: 1em;
+                line-height: 1.6;
+            }
+
+            .difficulty-selector {
+                flex-direction: column;
+            }
+
+            .difficulty-btn {
+                width: 100%;
+            }
+        }
+
+        /* Better mobile keyboard support */
+        @media (max-width: 768px) {
+            .typing-input:focus {
+                font-size: 16px; /* Prevents iOS zoom on input focus */
+            }
+        }
     </style>
 </head>
 <body>
