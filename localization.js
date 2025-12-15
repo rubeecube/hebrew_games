@@ -101,18 +101,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Get saved language or default to Hebrew
     const savedLang = localStorage.getItem('hebrewGameLang') || 'he';
     setLanguage(savedLang);
-    
-    // Add language selector if not exists
-    if (!document.querySelector('.lang-selector')) {
-        const langSelector = document.createElement('div');
-        langSelector.className = 'lang-selector';
-        langSelector.innerHTML = `
-            <button class="lang-btn" data-lang="he" onclick="setLanguage('he')">🇮🇱 עברית</button>
-            <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 English</button>
-            <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
-        `;
-        document.body.insertBefore(langSelector, document.body.firstChild);
-    }
-    
-    setLanguage(savedLang);
 });

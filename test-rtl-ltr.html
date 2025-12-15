@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTL/LTR Test - Hebrew Typing Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px;
+        }
+
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .test-section h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+        }
+
+        .direction-indicator {
+            padding: 15px;
+            background: #e8f4f8;
+            border-left: 4px solid #667eea;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        [dir="rtl"] .direction-indicator {
+            border-left: none;
+            border-right: 4px solid #667eea;
+        }
+
+        .text-sample {
+            padding: 15px;
+            background: white;
+            border: 2px dashed #667eea;
+            margin: 15px 0;
+        }
+
+        .info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        code {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>
+            <span class="lang-he">בדיקת RTL/LTR</span>
+            <span class="lang-en">RTL/LTR Test</span>
+            <span class="lang-fr">Test RTL/LTR</span>
+        </h1>
+
+        <div class="info">
+            <strong>
+                <span class="lang-he">הוראות:</span>
+                <span class="lang-en">Instructions:</span>
+                <span class="lang-fr">Instructions :</span>
+            </strong>
+            <br>
+            <span class="lang-he">לחצו על כפתורי השפה למעלה ובדקו שהכיוון משתנה אוטומטית</span>
+            <span class="lang-en">Click the language buttons above and check that direction changes automatically</span>
+            <span class="lang-fr">Cliquez sur les boutons de langue ci-dessus et vérifiez que la direction change automatiquement</span>
+        </div>
+
+        <div class="test-section">
+            <h2>
+                <span class="lang-he">1. כיוון המסמך הנוכחי</span>
+                <span class="lang-en">1. Current Document Direction</span>
+                <span class="lang-fr">1. Direction actuelle du document</span>
+            </h2>
+            <div class="direction-indicator" id="directionInfo">
+                <span class="lang-he">כיוון: <code id="dirValue">טוען...</code></span>
+                <span class="lang-en">Direction: <code id="dirValue">Loading...</code></span>
+                <span class="lang-fr">Direction: <code id="dirValue">Chargement...</code></span>
+                <br>
+                <span class="lang-he">שפה: <code id="langValue">טוען...</code></span>
+                <span class="lang-en">Language: <code id="langValue">Loading...</code></span>
+                <span class="lang-fr">Langue: <code id="langValue">Chargement...</code></span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>
+                <span class="lang-he">2. יישור טקסט</span>
+                <span class="lang-en">2. Text Alignment</span>
+                <span class="lang-fr">2. Alignement du texte</span>
+            </h2>
+            <div class="text-sample">
+                <p class="lang-he">
+                    <strong>עברית:</strong> טקסט זה אמור להיות מיושר לימין עם עברית ולשמאל עם אנגלית/צרפתית.
+                    האותיות העבריות צריכות להופיע מימין לשמאל: א ב ג ד ה ו ז ח ט
+                </p>
+                <p class="lang-en">
+                    <strong>English:</strong> This text should be aligned to the left.
+                    Hebrew letters should appear right-to-left: א ב ג ד ה ו ז ח ט
+                </p>
+                <p class="lang-fr">
+                    <strong>Français:</strong> Ce texte doit être aligné à gauche.
+                    Les lettres hébraïques devraient apparaître de droite à gauche: א ב ג ד ה ו ז ח ט
+                </p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>
+                <span class="lang-he">3. רשימות ממוספרות</span>
+                <span class="lang-en">3. Numbered Lists</span>
+                <span class="lang-fr">3. Listes numérotées</span>
+            </h2>
+            <div class="text-sample">
+                <ol>
+                    <li class="lang-he">פריט ראשון</li>
+                    <li class="lang-he">פריט שני</li>
+                    <li class="lang-he">פריט שלישי</li>
+                    
+                    <li class="lang-en">First item</li>
+                    <li class="lang-en">Second item</li>
+                    <li class="lang-en">Third item</li>
+                    
+                    <li class="lang-fr">Premier élément</li>
+                    <li class="lang-fr">Deuxième élément</li>
+                    <li class="lang-fr">Troisième élément</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>
+                <span class="lang-he">4. בדיקת localStorage</span>
+                <span class="lang-en">4. localStorage Test</span>
+                <span class="lang-fr">4. Test localStorage</span>
+            </h2>
+            <div class="direction-indicator">
+                <span class="lang-he">שפה שמורה: <code id="savedLang">בודק...</code></span>
+                <span class="lang-en">Saved language: <code id="savedLang">Checking...</code></span>
+                <span class="lang-fr">Langue enregistrée: <code id="savedLang">Vérification...</code></span>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>
+                <span class="lang-he">✅ מה צריך לעבוד</span>
+                <span class="lang-en">✅ What Should Work</span>
+                <span class="lang-fr">✅ Ce qui devrait fonctionner</span>
+            </h2>
+            <ul>
+                <li class="lang-he">כשמבחרים עברית: טקסט מימין לשמאל (RTL)</li>
+                <li class="lang-he">כשמבחרים אנגלית/צרפתית: טקסט משמאל לימין (LTR)</li>
+                <li class="lang-he">הבחירה נשמרת ונשארת בין דפים</li>
+                <li class="lang-he">רק השפה הנבחרת מוצגת</li>
+                
+                <li class="lang-en">When selecting Hebrew: text flows right-to-left (RTL)</li>
+                <li class="lang-en">When selecting English/French: text flows left-to-right (LTR)</li>
+                <li class="lang-en">Selection is saved and persists between pages</li>
+                <li class="lang-en">Only selected language is displayed</li>
+                
+                <li class="lang-fr">Lors de la sélection de l'hébreu: texte de droite à gauche (RTL)</li>
+                <li class="lang-fr">Lors de la sélection anglais/français: texte de gauche à droite (LTR)</li>
+                <li class="lang-fr">La sélection est enregistrée et persiste entre les pages</li>
+                <li class="lang-fr">Seule la langue sélectionnée est affichée</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="localization.js"></script>
+    <script>
+        // Update direction info dynamically
+        function updateDirectionInfo() {
+            const dir = document.documentElement.getAttribute('dir');
+            const lang = document.documentElement.getAttribute('lang');
+            const saved = localStorage.getItem('hebrewGameLang') || 'none';
+            
+            document.getElementById('dirValue').textContent = dir;
+            document.getElementById('langValue').textContent = lang;
+            document.getElementById('savedLang').textContent = saved;
+        }
+
+        // Update on load and whenever language changes
+        updateDirectionInfo();
+        
+        // Monitor for changes
+        const observer = new MutationObserver(updateDirectionInfo);
+        observer.observe(document.documentElement, { 
+            attributes: true, 
+            attributeFilter: ['dir', 'lang'] 
+        });
+    </script>
+</body>
+</html>
+
