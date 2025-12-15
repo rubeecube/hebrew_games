@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקלדת משפטים - תרגול עברית</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .sentence-display {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sentence-text {
+            font-size: 1.8em;
+            line-height: 1.6;
+            color: #2c3e50;
+            text-align: center;
+            user-select: none;
+        }
+
+        .char {
+            display: inline-block;
+            padding: 2px;
+        }
+
+        .char.correct {
+            color: #27ae60;
+            background: rgba(39, 174, 96, 0.1);
+        }
+
+        .char.incorrect {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .char.current {
+            background: #667eea;
+            color: white;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50%, 100% { opacity: 1; }
+            25%, 75% { opacity: 0.5; }
+        }
+
+        .input-area {
+            margin-bottom: 30px;
+        }
+
+        .typing-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5em;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            font-family: inherit;
+            direction: rtl;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .typing-input:focus {
+            border-color: #764ba2;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .secondary-btn {
+            background: #95a5a6;
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+
+        .secondary-btn:hover {
+            box-shadow: 0 7px 20px rgba(149, 165, 166, 0.6);
+        }
+
+        .game-over, .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .game-over.hidden, .start-screen.hidden {
+            display: none;
+        }
+
+        .game-over h1, .start-screen h1 {
+            color: white;
+            font-size: 3em;
+            margin-bottom: 30px;
+        }
+
+        .stats-summary {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            min-width: 400px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #667eea;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 10px;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .instructions {
+            color: white;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.2em;
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 15px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid transparent;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .difficulty-btn.selected {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← חזרה</a>
+    
+    <div class="start-screen" id="startScreen">
+        <h1>⌨️ הקלדת משפטים עברית</h1>
+        <div class="instructions">
+            <p>תרגלו הקלדה מהירה ומדויקת עם משפטים מעיתונים עבריים!</p>
+            <p>הקלידו את המשפט המוצג במדויק ככל האפשר.</p>
+            <p>תקבלו ניקוד על בסיס מהירות ודיוק.</p>
+        </div>
+        <div class="difficulty-selector">
+            <button class="difficulty-btn selected" onclick="selectDifficulty('easy')">קל</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('medium')">בינוני</button>
+            <button class="difficulty-btn" onclick="selectDifficulty('hard')">קשה</button>
+        </div>
+        <button onclick="startGame()">התחל משחק</button>
+    </div>
+
+    <div class="game-container">
+        <div class="header">
+            <div class="stat-box">משפט: <span id="sentenceNum">0</span>/10</div>
+            <div class="stat-box">דיוק: <span id="accuracy">100</span>%</div>
+            <div class="stat-box">מהירות: <span id="wpm">0</span> WPM</div>
+            <div class="stat-box">ניקוד: <span id="score">0</span></div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%">
+                <span id="progressText">0%</span>
+            </div>
+        </div>
+
+        <div class="sentence-display">
+            <div class="sentence-text" id="sentenceDisplay">לחץ "התחל" כדי להתחיל</div>
+        </div>
+
+        <div class="input-area">
+            <input 
+                type="text" 
+                class="typing-input" 
+                id="typingInput" 
+                placeholder="הקלד את המשפט כאן..."
+                disabled
+            >
+        </div>
+
+        <div class="actions">
+            <button onclick="startGame()" id="startBtn">התחל</button>
+            <button onclick="skipSentence()" id="skipBtn" disabled>דלג</button>
+            <button onclick="resetGame()" class="secondary-btn">התחל מחדש</button>
+        </div>
+    </div>
+
+    <div class="game-over hidden" id="gameOver">
+        <h1>כל הכבוד! 🎉</h1>
+        <div class="stats-summary">
+            <div class="stat-row">
+                <span class="stat-label">משפטים שהושלמו:</span>
+                <span class="stat-value"><span id="finalSentences">0</span>/10</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">דיוק כולל:</span>
+                <span class="stat-value"><span id="finalAccuracy">0</span>%</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">מהירות ממוצעת:</span>
+                <span class="stat-value"><span id="finalWpm">0</span> WPM</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">ניקוד סופי:</span>
+                <span class="stat-value"><span id="finalScore">0</span></span>
+            </div>
+        </div>
+        <button onclick="restartGame()">שחק שוב</button>
+    </div>
+
+    <script>
+        // Hebrew sentences from various topics (news-style)
+        const sentences = {
+            easy: [
+                "השמש זורחת בשמיים הכחולים",
+                "הילדים משחקים בגן הציבורי",
+                "הכלב רץ במהירות ברחוב",
+                "אני אוהב לאכול פירות טריים",
+                "המורה מלמדת את התלמידים",
+                "הספר נמצא על השולחן",
+                "המים קרים וצלולים",
+                "העץ גבוה ויפה מאוד",
+                "הציפור שרה בבוקר",
+                "החתול ישן על הכורסא"
+            ],
+            medium: [
+                "הממשלה החדשה הכריזה על תוכנית כלכלית מקיפה",
+                "המדענים גילו כוכב לכת חדש במערכת השמש",
+                "תחזית מזג האויר מבטיחה שמש וחום בסוף השבוע",
+                "הנשיא נפגש עם מנהיגי המדינות השכנות",
+                "חברת הטכנולוגיה הישראלית גייסה מיליוני דולרים",
+                "הרופאים ממליצים על אורח חיים בריא ופעיל",
+                "העיר מתכננת לבנות פארק ציבורי חדש במרכז",
+                "הספורטאים הישראלים זכו במדליות באולימפיאדה",
+                "האוניברסיטה פותחת תוכנית לימודים חדשה",
+                "תעשיית ההיי-טק הישראלית ממשיכה לצמוח"
+            ],
+            hard: [
+                "הכנסת אישרה אתמול בקריאה ראשונה את הצעת החוק השנויה במחלוקת",
+                "משרד הבריאות פרסם נתונים חדשים המעידים על עלייה במספר החולים",
+                "המשא והמתן בין הצדדים נמשך כבר שלושה שבועות ללא התקדמות משמעותית",
+                "החוקרים באוניברסיטה העברית פיתחו טכנולוגיה חדשנית לטיפול במחלות",
+                "הבורסה לניירות ערך סיימה את המסחר בירידה של שלושה אחוזים",
+                "ראש הממשלה הודיע על הקמת ועדת חקירה ממלכתית לבדיקת האירועים",
+                "משרד החינוך מתכנן רפורמה מקיפה במערכת החינוך הישראלית",
+                "בנק ישראל החליט להשאיר את הריבית ללא שינוי בחודש הנוכחי",
+                "המשטרה פתחה בחקירה נרחבת בעקבות תלונות על שחיתות במגזר הציבורי",
+                "המומחים צופים עלייה משמעותית במחירי הדיור במהלך השנה הקרובה"
+            ]
+        };
+
+        let currentDifficulty = 'easy';
+        let currentSentences = [];
+        let currentSentenceIndex = 0;
+        let currentSentence = '';
+        let typedText = '';
+        let gameActive = false;
+        let startTime = null;
+        let totalChars = 0;
+        let correctChars = 0;
+        let sentencesCompleted = 0;
+        let totalScore = 0;
+        let wpmHistory = [];
+
+        const typingInput = document.getElementById('typingInput');
+        const sentenceDisplay = document.getElementById('sentenceDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const skipBtn = document.getElementById('skipBtn');
+        const gameOverScreen = document.getElementById('gameOver');
+        const startScreen = document.getElementById('startScreen');
+
+        function selectDifficulty(difficulty) {
+            currentDifficulty = difficulty;
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function loadNewSentence() {
+            if (currentSentenceIndex >= currentSentences.length) {
+                endGame();
+                return;
+            }
+
+            currentSentence = currentSentences[currentSentenceIndex];
+            typedText = '';
+            typingInput.value = '';
+            startTime = Date.now();
+            
+            updateSentenceDisplay();
+            updateStats();
+        }
+
+        function updateSentenceDisplay() {
+            let html = '';
+            for (let i = 0; i < currentSentence.length; i++) {
+                const char = currentSentence[i];
+                let className = 'char';
+                
+                if (i < typedText.length) {
+                    className += typedText[i] === char ? ' correct' : ' incorrect';
+                } else if (i === typedText.length) {
+                    className += ' current';
+                }
+                
+                html += `<span class="${className}">${char}</span>`;
+            }
+            sentenceDisplay.innerHTML = html;
+        }
+
+        function calculateWPM() {
+            const timeElapsed = (Date.now() - startTime) / 1000 / 60; // minutes
+            const wordsTyped = typedText.length / 5; // standard: 5 chars = 1 word
+            return Math.round(wordsTyped / timeElapsed) || 0;
+        }
+
+        function calculateAccuracy() {
+            if (totalChars === 0) return 100;
+            return Math.round((correctChars / totalChars) * 100);
+        }
+
+        function updateStats() {
+            document.getElementById('sentenceNum').textContent = currentSentenceIndex + 1;
+            document.getElementById('accuracy').textContent = calculateAccuracy();
+            document.getElementById('wpm').textContent = calculateWPM();
+            document.getElementById('score').textContent = totalScore;
+            
+            const progress = ((currentSentenceIndex) / currentSentences.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '%';
+        }
+
+        function startGame() {
+            currentSentences = shuffleArray(sentences[currentDifficulty]);
+            currentSentenceIndex = 0;
+            totalChars = 0;
+            correctChars = 0;
+            sentencesCompleted = 0;
+            totalScore = 0;
+            wpmHistory = [];
+            gameActive = true;
+            
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            typingInput.disabled = false;
+            startBtn.disabled = true;
+            skipBtn.disabled = false;
+            typingInput.focus();
+            
+            loadNewSentence();
+        }
+
+        function skipSentence() {
+            currentSentenceIndex++;
+            loadNewSentence();
+        }
+
+        function endGame() {
+            gameActive = false;
+            typingInput.disabled = true;
+            startBtn.disabled = false;
+            skipBtn.disabled = true;
+            
+            const avgWpm = wpmHistory.length > 0 
+                ? Math.round(wpmHistory.reduce((a, b) => a + b, 0) / wpmHistory.length)
+                : 0;
+            
+            document.getElementById('finalSentences').textContent = sentencesCompleted;
+            document.getElementById('finalAccuracy').textContent = calculateAccuracy();
+            document.getElementById('finalWpm').textContent = avgWpm;
+            document.getElementById('finalScore').textContent = totalScore;
+            
+            gameOverScreen.classList.remove('hidden');
+        }
+
+        function resetGame() {
+            gameActive = false;
+            currentSentenceIndex = 0;
+            typedText = '';
+            typingInput.value = '';
+            typingInput.disabled = true;
+            startBtn.disabled = false;
+            skipBtn.disabled = true;
+            sentenceDisplay.textContent = 'לחץ "התחל" כדי להתחיל';
+            totalChars = 0;
+            correctChars = 0;
+            sentencesCompleted = 0;
+            totalScore = 0;
+            wpmHistory = [];
+            updateStats();
+        }
+
+        function restartGame() {
+            gameOverScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        typingInput.addEventListener('input', (e) => {
+            if (!gameActive) return;
+            
+            typedText = e.target.value;
+            
+            // Check each character
+            for (let i = 0; i < typedText.length; i++) {
+                if (i >= currentSentence.length) break;
+                
+                // Only count new characters
+                if (i >= totalChars - (currentSentence.length - typedText.length)) {
+                    totalChars++;
+                    if (typedText[i] === currentSentence[i]) {
+                        correctChars++;
+                    }
+                }
+            }
+            
+            updateSentenceDisplay();
+            updateStats();
+            
+            // Check if sentence is complete
+            if (typedText === currentSentence) {
+                const wpm = calculateWPM();
+                wpmHistory.push(wpm);
+                
+                // Calculate score for this sentence
+                const accuracy = (correctChars / currentSentence.length) * 100;
+                const sentenceScore = Math.round(wpm * (accuracy / 100) * (currentDifficulty === 'easy' ? 1 : currentDifficulty === 'medium' ? 1.5 : 2));
+                totalScore += sentenceScore;
+                
+                sentencesCompleted++;
+                currentSentenceIndex++;
+                
+                setTimeout(() => {
+                    loadNewSentence();
+                }, 500);
+            }
+        });
+    </script>
+</body>
+</html>
+

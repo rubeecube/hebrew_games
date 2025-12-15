@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחקי תרגול עברית - Hebrew Typing Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .game-icon {
+            font-size: 4em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-title {
+            font-size: 1.8em;
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .game-description {
+            color: #666;
+            text-align: center;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        .difficulty {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .difficulty-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ddd;
+        }
+
+        .difficulty-dot.active {
+            background: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>משחקי תרגול עברית</h1>
+        <p class="subtitle">שפרו את מיומנות ההקלדה שלכם בעברית דרך משחקים מהנים!</p>
+        
+        <div class="games-grid">
+            <a href="game1-runner.html" class="game-card">
+                <div class="game-icon">🏃</div>
+                <h2 class="game-title">רץ וקפוץ</h2>
+                <p class="game-description">
+                    לחצו על האות העברית הנכונה כדי לקפוץ ולהתקדם!
+                </p>
+                <div class="difficulty">
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot"></div>
+                    <div class="difficulty-dot"></div>
+                </div>
+            </a>
+
+            <a href="game2-car.html" class="game-card">
+                <div class="game-icon">🚗</div>
+                <h2 class="game-title">מכונית עברית</h2>
+                <p class="game-description">
+                    נווטו ימינה ושמאלה באמצעות אותיות עבריות אקראיות!
+                </p>
+                <div class="difficulty">
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot"></div>
+                </div>
+            </a>
+
+            <a href="game3-typing.html" class="game-card">
+                <div class="game-icon">⌨️</div>
+                <h2 class="game-title">הקלדת משפטים</h2>
+                <p class="game-description">
+                    תרגול הקלדה מהיר עם משפטים מעיתונים עבריים
+                </p>
+                <div class="difficulty">
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot active"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+
