@@ -491,6 +491,7 @@
             const obstacleCreatedTime = Date.now();
             let jumped = false;
             let passed = false;
+            let scoringZoneChecked = false;
 
             const checkCollision = setInterval(() => {
                 if (!gameActive) {
@@ -501,14 +502,30 @@
                 const obstacleRect = obstacle.getBoundingClientRect();
                 const playerRect = player.getBoundingClientRect();
                 
-                // Check if player is jumping (in the air) - mark as jumped if they're in the air while obstacle is near
-                const isNearPlayer = obstacleRect.right > playerRect.left - 100 && obstacleRect.left < playerRect.right + 100;
-                if (player.classList.contains('jumping') && isNearPlayer && !jumped) {
+                // Define the "danger zone" - when obstacle is close to player
+                const dangerZoneStart = playerRect.left - 150;
+                const dangerZoneEnd = playerRect.right + 50;
+                const isInDangerZone = obstacleRect.right > dangerZoneStart && obstacleRect.left < dangerZoneEnd;
+                
+                // If player is jumping while obstacle is in danger zone, mark as jumped
+                if (player.classList.contains('jumping') && isInDangerZone && !jumped) {
                     jumped = true;
                 }
 
-                // Check if obstacle passed the player
-                if (obstacleRect.right < playerRect.left - 50 && !passed) {
+                // Check scoring zone - give points when obstacle passes while jumping
+                const scoringZoneStart = playerRect.left - 50;
+                const scoringZoneEnd = playerRect.right + 50;
+                const isInScoringZone = obstacleRect.right > scoringZoneStart && obstacleRect.left < scoringZoneEnd;
+                
+                if (isInScoringZone && !scoringZoneChecked) {
+                    scoringZoneChecked = true;
+                    if (player.classList.contains('jumping')) {
+                        jumped = true; // Also mark as jumped if in air during scoring zone
+                    }
+                }
+
+                // Check if obstacle fully passed the player
+                if (obstacleRect.right < playerRect.left - 100 && !passed) {
                     passed = true;
                     if (!jumped) {
                         // Player didn't jump - lose life
@@ -553,14 +570,22 @@
                 createMobileButtons();
             }
 
-            // Create obstacles periodically
-            obstacleInterval = setInterval(() => {
+            // Wait 2 seconds before starting obstacles (grace period)
+            setTimeout(() => {
+                if (!gameActive) return; // Check if game is still active
+                
+                // Create first obstacle
                 createObstacle();
-                // Gradually increase difficulty (slower progression)
-                if (gameSpeed > 2500) {
-                    gameSpeed -= 100;
-                }
-            }, gameSpeed);
+                
+                // Create obstacles periodically
+                obstacleInterval = setInterval(() => {
+                    createObstacle();
+                    // Gradually increase difficulty (slower progression)
+                    if (gameSpeed > 2500) {
+                        gameSpeed -= 100;
+                    }
+                }, gameSpeed);
+            }, 2000);
         }
 
         function endGame() {
