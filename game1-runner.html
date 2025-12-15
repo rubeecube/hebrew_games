@@ -495,10 +495,9 @@
             
             gameContainer.appendChild(obstacle);
             
-            const obstacleCreatedTime = Date.now();
             let jumped = false;
             let passed = false;
-            let scoringZoneChecked = false;
+            let wasJumpingInRange = false;
 
             const checkCollision = setInterval(() => {
                 if (!gameActive) {
@@ -509,32 +508,25 @@
                 const obstacleRect = obstacle.getBoundingClientRect();
                 const playerRect = player.getBoundingClientRect();
                 
-                // Define the "danger zone" - when obstacle is close to player
-                const dangerZoneStart = playerRect.left - 150;
-                const dangerZoneEnd = playerRect.right + 50;
-                const isInDangerZone = obstacleRect.right > dangerZoneStart && obstacleRect.left < dangerZoneEnd;
+                // Very wide detection zone - 250px before player to 100px after
+                const detectionStart = playerRect.left - 250;
+                const detectionEnd = playerRect.right + 100;
+                const isInRange = obstacleRect.right > detectionStart && obstacleRect.left < detectionEnd;
                 
-                // If player is jumping while obstacle is in danger zone, mark as jumped
-                if (player.classList.contains('jumping') && isInDangerZone && !jumped) {
-                    jumped = true;
+                // If player is jumping AT ANY POINT while obstacle is in range, mark as successful
+                if (isInRange && player.classList.contains('jumping')) {
+                    wasJumpingInRange = true;
                 }
 
-                // Check scoring zone - give points when obstacle passes while jumping
-                const scoringZoneStart = playerRect.left - 50;
-                const scoringZoneEnd = playerRect.right + 50;
-                const isInScoringZone = obstacleRect.right > scoringZoneStart && obstacleRect.left < scoringZoneEnd;
-                
-                if (isInScoringZone && !scoringZoneChecked) {
-                    scoringZoneChecked = true;
-                    if (player.classList.contains('jumping')) {
-                        jumped = true; // Also mark as jumped if in air during scoring zone
-                    }
-                }
-
-                // Check if obstacle fully passed the player
-                if (obstacleRect.right < playerRect.left - 100 && !passed) {
+                // Only check once the obstacle has fully passed
+                if (obstacleRect.right < playerRect.left - 150 && !passed) {
                     passed = true;
-                    if (!jumped) {
+                    
+                    if (wasJumpingInRange) {
+                        // Successfully jumped - increase score
+                        score += 10;
+                        scoreEl.textContent = score;
+                    } else {
                         // Player didn't jump - lose life
                         lives--;
                         updateLives();
@@ -542,15 +534,11 @@
                         if (lives <= 0) {
                             endGame();
                         }
-                    } else {
-                        // Successfully jumped - increase score
-                        score += 10;
-                        scoreEl.textContent = score;
                     }
                 }
 
                 // Remove obstacle when off screen
-                if (obstacleRect.right < -100) {
+                if (obstacleRect.left > gameContainer.clientWidth + 100) {
                     clearInterval(checkCollision);
                     obstacle.remove();
                 }
