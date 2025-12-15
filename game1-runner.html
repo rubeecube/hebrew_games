@@ -53,6 +53,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
+        .stat-label {
+            font-size: 0.7em;
+            color: #999;
+            display: block;
+            font-weight: normal;
+        }
+
         .target-letter {
             font-size: 2em;
             color: #e74c3c;
@@ -194,23 +201,27 @@
 </head>
 <body>
     <div class="game-container">
-        <a href="index.html" class="back-btn">← חזרה</a>
+        <a href="index.html" class="back-btn">← חזרה (Back)</a>
         
         <div class="start-screen" id="startScreen">
-            <h1>רץ וקפוץ! 🏃</h1>
+            <h1>רץ וקפוץ! 🏃<br><small style="font-size: 0.5em; opacity: 0.8;">Run and Jump!</small></h1>
             <div class="instructions">
-                <p>לחצו על האות העברית הנכונה כדי לקפוץ מעל המכשולים!</p>
-                <p>האות המבוקשת מוצגת למעלה במרכז המסך.</p>
-                <p>לחצו על האות כשהמכשול מתקרב - אין צורך בטיימינג מדויק!</p>
-                <p>יש לכם 3 חיים. בהצלחה!</p>
+                <p><strong>לחצו על האות העברית הנכונה כדי לקפוץ מעל המכשולים!</strong><br>
+                <small style="opacity: 0.8;">Press the correct Hebrew letter to jump over obstacles!</small></p>
+                <p><strong>האות המבוקשת מוצגת למעלה במרכז המסך.</strong><br>
+                <small style="opacity: 0.8;">The target letter is displayed at the top center of the screen.</small></p>
+                <p><strong>לחצו על האות כשהמכשול מתקרב - אין צורך בטיימינג מדויק!</strong><br>
+                <small style="opacity: 0.8;">Press the letter when the obstacle approaches - precise timing not required!</small></p>
+                <p><strong>יש לכם 3 חיים. בהצלחה!</strong><br>
+                <small style="opacity: 0.8;">You have 3 lives. Good luck!</small></p>
             </div>
-            <button onclick="startGame()">התחל משחק</button>
+            <button onclick="startGame()">התחל משחק (Start Game)</button>
         </div>
 
         <div class="header">
-            <div class="score">ניקוד: <span id="score">0</span></div>
-            <div class="target-letter">לחץ: <span id="targetLetter">-</span></div>
-            <div class="lives">חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div class="score"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
+            <div class="target-letter"><span class="stat-label">Press</span>לחץ: <span id="targetLetter">-</span></div>
+            <div class="lives"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
         </div>
 
         <div class="cloud" style="top: 50px; animation-delay: 0s;">☁️</div>
@@ -224,9 +235,9 @@
         </div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!</h1>
-            <p>הניקוד שלך: <span id="finalScore">0</span></p>
-            <button onclick="restartGame()">שחק שוב</button>
+            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
+            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
+            <button onclick="restartGame()">שחק שוב (Play Again)</button>
         </div>
     </div>
 

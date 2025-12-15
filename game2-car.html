@@ -53,6 +53,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
+        .stat-label {
+            font-size: 0.7em;
+            color: #999;
+            display: block;
+            font-weight: normal;
+        }
+
         .road {
             position: absolute;
             width: 100%;
@@ -300,24 +307,29 @@
 </head>
 <body>
     <div class="game-container">
-        <a href="index.html" class="back-btn">← חזרה</a>
+        <a href="index.html" class="back-btn">← חזרה (Back)</a>
         
         <div class="start-screen" id="startScreen">
-            <h1>מכונית עברית! 🚗</h1>
+            <h1>מכונית עברית! 🚗<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Car!</small></h1>
             <div class="instructions">
-                <p>נווטו את המכונית ימינה ושמאלה בעזרת אותיות עבריות!</p>
-                <p>לחצו על האות המתאימה כדי לנוע:</p>
-                <p><strong>שמאל ⬅️ | מרכז ⬆️ | ימין ➡️</strong></p>
-                <p>הימנעו ממכשולים ואספו מטבעות!</p>
-                <p><strong>⚠️ שימו לב: אחת האותיות משתנה כל 5 שניות!</strong></p>
+                <p><strong>נווטו את המכונית ימינה ושמאלה בעזרת אותיות עבריות!</strong><br>
+                <small style="opacity: 0.8;">Navigate the car left and right using Hebrew letters!</small></p>
+                <p><strong>לחצו על האות המתאימה כדי לנוע:</strong><br>
+                <small style="opacity: 0.8;">Press the matching letter to move:</small></p>
+                <p><strong>שמאל ⬅️ | מרכז ⬆️ | ימין ➡️</strong><br>
+                <small style="opacity: 0.8;">Left | Center | Right</small></p>
+                <p><strong>הימנעו ממכשולים ואספו מטבעות!</strong><br>
+                <small style="opacity: 0.8;">Avoid obstacles and collect coins!</small></p>
+                <p><strong>⚠️ שימו לב: אחת האותיות משתנה כל 5 שניות!</strong><br>
+                <small style="opacity: 0.8;">Warning: One letter changes every 5 seconds!</small></p>
             </div>
-            <button onclick="startGame()">התחל משחק</button>
+            <button onclick="startGame()">התחל משחק (Start Game)</button>
         </div>
 
         <div class="header">
-            <div class="score">ניקוד: <span id="score">0</span></div>
-            <div class="speed">מהירות: <span id="speed">1x</span></div>
-            <div class="lives">חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div class="score"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
+            <div class="speed"><span class="stat-label">Speed</span>מהירות: <span id="speed">1x</span></div>
+            <div class="lives"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
         </div>
 
         <div class="road">
@@ -326,7 +338,7 @@
         </div>
 
         <div class="key-display" id="keyDisplay">
-            <div class="key-instruction">לחץ על:</div>
+            <div class="key-instruction">לחץ על: <small style="font-size: 0.7em; opacity: 0.7;">(Press)</small></div>
             <div class="key-options">
                 <span class="key-option"><span id="leftKey">-</span> ⬅️</span>
                 <span class="key-option"><span id="centerKey">-</span> ⬆️</span>
@@ -337,9 +349,9 @@
         <div class="car center-lane" id="car">🚗</div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!</h1>
-            <p>הניקוד שלך: <span id="finalScore">0</span></p>
-            <button onclick="restartGame()">שחק שוב</button>
+            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
+            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
+            <button onclick="restartGame()">שחק שוב (Play Again)</button>
         </div>
     </div>
 

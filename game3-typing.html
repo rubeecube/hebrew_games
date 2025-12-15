@@ -48,6 +48,13 @@
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
+        .stat-label {
+            font-size: 0.7em;
+            opacity: 0.8;
+            display: block;
+            font-weight: normal;
+        }
+
         .sentence-display {
             background: #f8f9fa;
             padding: 30px;
@@ -297,29 +304,32 @@
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-btn">← חזרה</a>
+    <a href="index.html" class="back-btn">← חזרה (Back)</a>
     
     <div class="start-screen" id="startScreen">
-        <h1>⌨️ הקלדת משפטים עברית</h1>
+        <h1>⌨️ הקלדת משפטים עברית<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Sentence Typing</small></h1>
         <div class="instructions">
-            <p>תרגלו הקלדה מהירה ומדויקת עם משפטים מעיתונים עבריים!</p>
-            <p>הקלידו את המשפט המוצג במדויק ככל האפשר.</p>
-            <p>תקבלו ניקוד על בסיס מהירות ודיוק.</p>
+            <p><strong>תרגלו הקלדה מהירה ומדויקת עם משפטים מעיתונים עבריים!</strong><br>
+            <small style="opacity: 0.8;">Practice fast and accurate typing with Hebrew newspaper sentences!</small></p>
+            <p><strong>הקלידו את המשפט המוצג במדויק ככל האפשר.</strong><br>
+            <small style="opacity: 0.8;">Type the displayed sentence as accurately as possible.</small></p>
+            <p><strong>תקבלו ניקוד על בסיס מהירות ודיוק.</strong><br>
+            <small style="opacity: 0.8;">You'll receive points based on speed and accuracy.</small></p>
         </div>
         <div class="difficulty-selector">
-            <button class="difficulty-btn selected" onclick="selectDifficulty('easy')">קל</button>
-            <button class="difficulty-btn" onclick="selectDifficulty('medium')">בינוני</button>
-            <button class="difficulty-btn" onclick="selectDifficulty('hard')">קשה</button>
+            <button class="difficulty-btn selected" onclick="selectDifficulty('easy')">קל<br><small style="font-size: 0.7em;">Easy</small></button>
+            <button class="difficulty-btn" onclick="selectDifficulty('medium')">בינוני<br><small style="font-size: 0.7em;">Medium</small></button>
+            <button class="difficulty-btn" onclick="selectDifficulty('hard')">קשה<br><small style="font-size: 0.7em;">Hard</small></button>
         </div>
-        <button onclick="startGame()">התחל משחק</button>
+        <button onclick="startGame()">התחל משחק (Start Game)</button>
     </div>
 
     <div class="game-container">
         <div class="header">
-            <div class="stat-box">משפט: <span id="sentenceNum">0</span>/10</div>
-            <div class="stat-box">דיוק: <span id="accuracy">100</span>%</div>
-            <div class="stat-box">מהירות: <span id="wpm">0</span> WPM</div>
-            <div class="stat-box">ניקוד: <span id="score">0</span></div>
+            <div class="stat-box"><span class="stat-label">Sentence</span>משפט: <span id="sentenceNum">0</span>/10</div>
+            <div class="stat-box"><span class="stat-label">Accuracy</span>דיוק: <span id="accuracy">100</span>%</div>
+            <div class="stat-box"><span class="stat-label">Speed</span>מהירות: <span id="wpm">0</span> WPM</div>
+            <div class="stat-box"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
         </div>
 
         <div class="progress-bar">
@@ -350,33 +360,33 @@
         </div>
 
         <div class="actions">
-            <button onclick="startGame()" id="startBtn">התחל</button>
-            <button onclick="skipSentence()" id="skipBtn" disabled>דלג</button>
-            <button onclick="resetGame()" class="secondary-btn">התחל מחדש</button>
+            <button onclick="startGame()" id="startBtn">התחל (Start)</button>
+            <button onclick="skipSentence()" id="skipBtn" disabled>דלג (Skip)</button>
+            <button onclick="resetGame()" class="secondary-btn">התחל מחדש (Restart)</button>
         </div>
     </div>
 
     <div class="game-over hidden" id="gameOver">
-        <h1>כל הכבוד! 🎉</h1>
+        <h1>כל הכבוד! 🎉<br><small style="font-size: 0.5em; opacity: 0.8;">Well Done!</small></h1>
         <div class="stats-summary">
             <div class="stat-row">
-                <span class="stat-label">משפטים שהושלמו:</span>
+                <span class="stat-label">משפטים שהושלמו: <small style="opacity: 0.7;">(Completed)</small></span>
                 <span class="stat-value"><span id="finalSentences">0</span>/10</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">דיוק כולל:</span>
+                <span class="stat-label">דיוק כולל: <small style="opacity: 0.7;">(Accuracy)</small></span>
                 <span class="stat-value"><span id="finalAccuracy">0</span>%</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">מהירות ממוצעת:</span>
+                <span class="stat-label">מהירות ממוצעת: <small style="opacity: 0.7;">(Avg Speed)</small></span>
                 <span class="stat-value"><span id="finalWpm">0</span> WPM</span>
             </div>
             <div class="stat-row">
-                <span class="stat-label">ניקוד סופי:</span>
+                <span class="stat-label">ניקוד סופי: <small style="opacity: 0.7;">(Final Score)</small></span>
                 <span class="stat-value"><span id="finalScore">0</span></span>
             </div>
         </div>
-        <button onclick="restartGame()">שחק שוב</button>
+        <button onclick="restartGame()">שחק שוב (Play Again)</button>
     </div>
 
     <script>

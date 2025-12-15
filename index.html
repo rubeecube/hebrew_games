@@ -75,8 +75,16 @@
             font-size: 1.8em;
             color: #667eea;
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             font-weight: bold;
+        }
+
+        .game-title-en {
+            font-size: 1em;
+            color: #888;
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
         }
 
         .game-description {
@@ -84,6 +92,15 @@
             text-align: center;
             line-height: 1.6;
             font-size: 1.1em;
+        }
+
+        .game-description-en {
+            color: #999;
+            text-align: center;
+            line-height: 1.4;
+            font-size: 0.9em;
+            margin-top: 8px;
+            font-style: italic;
         }
 
         .difficulty {
@@ -107,15 +124,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>משחקי תרגול עברית</h1>
-        <p class="subtitle">שפרו את מיומנות ההקלדה שלכם בעברית דרך משחקים מהנים!</p>
+        <h1>משחקי תרגול עברית<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Typing Games</small></h1>
+        <p class="subtitle">שפרו את מיומנות ההקלדה שלכם בעברית דרך משחקים מהנים!<br><small style="opacity: 0.8;">Improve your Hebrew typing skills through fun games!</small></p>
         
         <div class="games-grid">
             <a href="game1-runner.html" class="game-card">
                 <div class="game-icon">🏃</div>
                 <h2 class="game-title">רץ וקפוץ</h2>
+                <p class="game-title-en">Run and Jump</p>
                 <p class="game-description">
                     לחצו על האות העברית הנכונה כדי לקפוץ ולהתקדם!
+                </p>
+                <p class="game-description-en">
+                    Press the correct Hebrew letter to jump and advance!
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -127,8 +148,12 @@
             <a href="game2-car.html" class="game-card">
                 <div class="game-icon">🚗</div>
                 <h2 class="game-title">מכונית עברית</h2>
+                <p class="game-title-en">Hebrew Car</p>
                 <p class="game-description">
                     נווטו ימינה ושמאלה באמצעות אותיות עבריות אקראיות!
+                </p>
+                <p class="game-description-en">
+                    Navigate left and right using random Hebrew letters!
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -140,8 +165,12 @@
             <a href="game3-typing.html" class="game-card">
                 <div class="game-icon">⌨️</div>
                 <h2 class="game-title">הקלדת משפטים</h2>
+                <p class="game-title-en">Sentence Typing</p>
                 <p class="game-description">
                     תרגול הקלדה מהיר עם משפטים מעיתונים עבריים
+                </p>
+                <p class="game-description-en">
+                    Fast typing practice with sentences from Hebrew newspapers
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
