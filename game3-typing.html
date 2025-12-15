@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>הקלדת משפטים - תרגול עברית</title>
     <style>
         * {
@@ -273,6 +273,16 @@
             border-radius: 20px;
             font-weight: bold;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .back-btn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
         }
 
         .instructions {
@@ -306,7 +316,8 @@
 
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 0;
+                overflow-x: hidden;
             }
 
             h1 {
@@ -314,17 +325,21 @@
             }
 
             .game-container {
-                padding: 20px;
+                padding: 10px;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
 
             .header {
                 flex-wrap: wrap;
-                gap: 10px;
+                gap: 5px;
+                margin-bottom: 10px;
             }
 
             .stat-box {
-                font-size: 1em;
-                padding: 10px 15px;
+                font-size: 0.85em;
+                padding: 8px 12px;
                 flex: 1 1 45%;
             }
 
@@ -332,27 +347,52 @@
                 font-size: 0.65em;
             }
 
+            .progress-bar {
+                height: 20px;
+                margin-bottom: 10px;
+            }
+
+            .sentence-display {
+                padding: 15px;
+                margin-bottom: 5px;
+                min-height: 80px;
+                max-height: 120px;
+                overflow-y: auto;
+            }
+
             .sentence-text {
-                font-size: 1.3em;
+                font-size: 1.1em;
+                line-height: 1.4;
+            }
+
+            .translation-display {
+                padding: 10px 15px;
+                margin-bottom: 10px;
             }
 
             .translation-text {
-                font-size: 0.9em;
+                font-size: 0.8em;
+            }
+
+            .input-area {
+                margin-bottom: 10px;
             }
 
             .typing-input {
-                font-size: 1.2em;
-                padding: 15px;
+                font-size: 16px; /* Prevents iOS zoom */
+                padding: 12px;
             }
 
             .actions {
-                flex-direction: column;
+                flex-direction: row;
+                gap: 8px;
+                margin-top: auto;
             }
 
             button {
-                width: 100%;
-                padding: 12px 25px;
-                font-size: 1.1em;
+                flex: 1;
+                padding: 10px 15px;
+                font-size: 0.95em;
             }
 
             .stats-summary {
@@ -395,12 +435,34 @@
                 padding: 10px;
                 font-size: 0.9em;
             }
+
+            /* When keyboard is open, make content visible */
+            .typing-input:focus ~ .sentence-display,
+            .typing-input:focus {
+                position: relative;
+                z-index: 1;
+            }
         }
 
-        /* Better mobile keyboard support */
-        @media (max-width: 768px) {
-            .typing-input:focus {
-                font-size: 16px; /* Prevents iOS zoom on input focus */
+        /* Fix for iOS keyboard */
+        @media (max-width: 768px) and (max-height: 600px) {
+            .sentence-display {
+                min-height: 60px;
+                max-height: 80px;
+                font-size: 0.9em;
+            }
+
+            .translation-display {
+                padding: 5px 10px;
+            }
+
+            .header {
+                margin-bottom: 5px;
+            }
+
+            .stat-box {
+                font-size: 0.75em;
+                padding: 5px 8px;
             }
         }
     </style>
@@ -742,6 +804,16 @@
             gameOverScreen.classList.add('hidden');
             startScreen.classList.remove('hidden');
         }
+
+        // Handle mobile keyboard opening - scroll sentence into view
+        typingInput.addEventListener('focus', () => {
+            if (!gameActive) return;
+            
+            // Small delay to let keyboard animate in
+            setTimeout(() => {
+                sentenceDisplay.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        });
 
         typingInput.addEventListener('input', (e) => {
             if (!gameActive) return;
