@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "alias": ["hebrew-game.vercel.app"],
   "builds": [
     {
       "src": "**/*.html",
