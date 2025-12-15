@@ -342,6 +342,13 @@
     <script>
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         
+        // Hebrew to English keyboard mapping
+        const hebrewToEnglish = {
+            'ק': 'q', 'ר': 'w', 'א': 'e', 'ט': 'r', 'ו': 't', 'ן': 'y', 'ם': 'u', 'פ': 'i', 'ף': 'p',
+            'ש': 'a', 'ד': 's', 'ג': 'd', 'כ': 'f', 'ע': 'g', 'י': 'h', 'ח': 'j', 'ל': 'k', 'ך': 'l',
+            'ז': 'z', 'ס': 'x', 'ב': 'c', 'ה': 'v', 'נ': 'b', 'מ': 'n', 'צ': 'm', 'ת': ',', 'ץ': '.'
+        };
+        
         let score = 0;
         let lives = 3;
         let currentLetter = '';
@@ -389,7 +396,7 @@
                         currentPressedKey = letter;
                         isKeyPressed = true;
                         btn.classList.add('active-key');
-                        if (letter === currentLetter) {
+                        if (isCorrectKey(letter)) {
                             jump();
                         }
                     });
@@ -412,7 +419,7 @@
                         currentPressedKey = letter;
                         isKeyPressed = true;
                         btn.classList.add('active-key');
-                        if (letter === currentLetter) {
+                        if (isCorrectKey(letter)) {
                             jump();
                         }
                     });
@@ -465,7 +472,7 @@
         }
 
         function updateJumpState() {
-            if (gameActive && isKeyPressed && currentPressedKey === currentLetter) {
+            if (gameActive && isKeyPressed && isCorrectKey(currentPressedKey)) {
                 jump();
             } else {
                 stopJump();
@@ -609,6 +616,11 @@
             startGame();
         }
 
+        function isCorrectKey(pressedKey) {
+            // Check if pressed key matches current letter OR its English equivalent
+            return pressedKey === currentLetter || pressedKey === hebrewToEnglish[currentLetter];
+        }
+
         // Keyboard event listener - key down
         document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
@@ -618,7 +630,7 @@
             currentPressedKey = pressedKey;
             isKeyPressed = true;
             
-            if (pressedKey === currentLetter) {
+            if (isCorrectKey(pressedKey)) {
                 jump();
             }
         });
