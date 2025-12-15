@@ -470,13 +470,14 @@
                 const obstacleRect = obstacle.getBoundingClientRect();
                 const playerRect = player.getBoundingClientRect();
                 
-                // Check if player is jumping (in the air)
-                if (player.classList.contains('jumping') && !jumped) {
+                // Check if player is jumping (in the air) - mark as jumped if they're in the air while obstacle is near
+                const isNearPlayer = obstacleRect.right > playerRect.left - 100 && obstacleRect.left < playerRect.right + 100;
+                if (player.classList.contains('jumping') && isNearPlayer && !jumped) {
                     jumped = true;
                 }
 
                 // Check if obstacle passed the player
-                if (obstacleRect.right < playerRect.left && !passed) {
+                if (obstacleRect.right < playerRect.left - 50 && !passed) {
                     passed = true;
                     if (!jumped) {
                         // Player didn't jump - lose life
