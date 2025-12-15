@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>משחקי תרגול עברית - Hebrew Typing Games</title>
+    <title>Hebrew Typing Games - משחקי תרגול עברית</title>
     <style>
         * {
             margin: 0;
@@ -19,6 +19,56 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+        }
+
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .lang-selector {
+                top: 10px;
+                left: 10px;
+                gap: 5px;
+                padding: 8px;
+            }
+
+            .lang-btn {
+                padding: 6px 10px;
+                font-size: 0.75em;
+            }
         }
 
         .container {
@@ -160,19 +210,29 @@
 </head>
 <body>
     <div class="container">
-        <h1>משחקי תרגול עברית<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Typing Games</small></h1>
-        <p class="subtitle">שפרו את מיומנות ההקלדה שלכם בעברית דרך משחקים מהנים!<br><small style="opacity: 0.8;">Improve your Hebrew typing skills through fun games!</small></p>
+        <h1>
+            <span class="lang-he" data-i18n="index.title">משחקי תרגול עברית</span>
+            <span class="lang-en" data-i18n="index.title">Hebrew Typing Games</span>
+            <span class="lang-fr" data-i18n="index.title">Jeux de frappe hébraïque</span>
+        </h1>
+        <p class="subtitle">
+            <span class="lang-he" data-i18n="index.subtitle">שפרו את מיומנות ההקלדה שלכם בעברית דרך משחקים מהנים!</span>
+            <span class="lang-en" data-i18n="index.subtitle">Improve your Hebrew typing skills through fun games!</span>
+            <span class="lang-fr" data-i18n="index.subtitle">Améliorez vos compétences de frappe en hébreu avec des jeux amusants !</span>
+        </p>
         
         <div class="games-grid">
             <a href="game1-runner.html" class="game-card">
                 <div class="game-icon">🏃</div>
-                <h2 class="game-title">רץ וקפוץ</h2>
-                <p class="game-title-en">Run and Jump</p>
+                <h2 class="game-title">
+                    <span class="lang-he" data-i18n="index.game1.title">רץ וקפוץ</span>
+                    <span class="lang-en" data-i18n="index.game1.title">Run and Jump</span>
+                    <span class="lang-fr" data-i18n="index.game1.title">Courir et sauter</span>
+                </h2>
                 <p class="game-description">
-                    לחצו על האות העברית הנכונה כדי לקפוץ ולהתקדם!
-                </p>
-                <p class="game-description-en">
-                    Press the correct Hebrew letter to jump and advance!
+                    <span class="lang-he" data-i18n="index.game1.desc">לחצו על האות העברית הנכונה כדי לקפוץ ולהתקדם!</span>
+                    <span class="lang-en" data-i18n="index.game1.desc">Press the correct Hebrew letter to jump and advance!</span>
+                    <span class="lang-fr" data-i18n="index.game1.desc">Appuyez sur la bonne lettre hébraïque pour sauter et avancer !</span>
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -183,13 +243,15 @@
 
             <a href="game2-car.html" class="game-card">
                 <div class="game-icon">🚗</div>
-                <h2 class="game-title">מכונית עברית</h2>
-                <p class="game-title-en">Hebrew Car</p>
+                <h2 class="game-title">
+                    <span class="lang-he" data-i18n="index.game2.title">מכונית עברית</span>
+                    <span class="lang-en" data-i18n="index.game2.title">Hebrew Car</span>
+                    <span class="lang-fr" data-i18n="index.game2.title">Voiture hébraïque</span>
+                </h2>
                 <p class="game-description">
-                    נווטו ימינה ושמאלה באמצעות אותיות עבריות אקראיות!
-                </p>
-                <p class="game-description-en">
-                    Navigate left and right using random Hebrew letters!
+                    <span class="lang-he" data-i18n="index.game2.desc">נווטו ימינה ושמאלה באמצעות אותיות עבריות אקראיות!</span>
+                    <span class="lang-en" data-i18n="index.game2.desc">Navigate left and right using random Hebrew letters!</span>
+                    <span class="lang-fr" data-i18n="index.game2.desc">Naviguez à gauche et à droite avec des lettres hébraïques aléatoires !</span>
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -200,13 +262,15 @@
 
             <a href="game3-typing.html" class="game-card">
                 <div class="game-icon">⌨️</div>
-                <h2 class="game-title">הקלדת משפטים</h2>
-                <p class="game-title-en">Sentence Typing</p>
+                <h2 class="game-title">
+                    <span class="lang-he" data-i18n="index.game3.title">הקלדת משפטים</span>
+                    <span class="lang-en" data-i18n="index.game3.title">Sentence Typing</span>
+                    <span class="lang-fr" data-i18n="index.game3.title">Frappe de phrases</span>
+                </h2>
                 <p class="game-description">
-                    תרגול הקלדה מהיר עם משפטים מעיתונים עבריים
-                </p>
-                <p class="game-description-en">
-                    Fast typing practice with sentences from Hebrew newspapers
+                    <span class="lang-he" data-i18n="index.game3.desc">תרגול הקלדה מהיר עם משפטים מעיתונים עבריים</span>
+                    <span class="lang-en" data-i18n="index.game3.desc">Fast typing practice with sentences from Hebrew newspapers</span>
+                    <span class="lang-fr" data-i18n="index.game3.desc">Pratique de frappe rapide avec des phrases de journaux hébreux</span>
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -217,13 +281,15 @@
 
             <a href="game4-falling.html" class="game-card">
                 <div class="game-icon">🎯</div>
-                <h2 class="game-title">אותיות נופלות</h2>
-                <p class="game-title-en">Falling Letters</p>
+                <h2 class="game-title">
+                    <span class="lang-he" data-i18n="index.game4.title">אותיות נופלות</span>
+                    <span class="lang-en" data-i18n="index.game4.title">Falling Letters</span>
+                    <span class="lang-fr" data-i18n="index.game4.title">Lettres tombantes</span>
+                </h2>
                 <p class="game-description">
-                    הקלידו את האותיות לפני שהן נוגעות בקרקע!
-                </p>
-                <p class="game-description-en">
-                    Type the letters before they hit the ground!
+                    <span class="lang-he" data-i18n="index.game4.desc">הקלידו את האותיות לפני שהן נוגעות בקרקע!</span>
+                    <span class="lang-en" data-i18n="index.game4.desc">Type the letters before they hit the ground!</span>
+                    <span class="lang-fr" data-i18n="index.game4.desc">Tapez les lettres avant qu'elles ne touchent le sol !</span>
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -234,13 +300,15 @@
 
             <a href="game5-balloons.html" class="game-card">
                 <div class="game-icon">🎈</div>
-                <h2 class="game-title">פצח בלונים</h2>
-                <p class="game-title-en">Balloon Pop</p>
+                <h2 class="game-title">
+                    <span class="lang-he" data-i18n="index.game5.title">פצח בלונים</span>
+                    <span class="lang-en" data-i18n="index.game5.title">Balloon Pop</span>
+                    <span class="lang-fr" data-i18n="index.game5.title">Éclater des ballons</span>
+                </h2>
                 <p class="game-description">
-                    פוצצו בלונים עם אותיות לפני שהם עפים!
-                </p>
-                <p class="game-description-en">
-                    Pop balloons with letters before they fly away!
+                    <span class="lang-he" data-i18n="index.game5.desc">פוצצו בלונים עם אותיות לפני שהם עפים!</span>
+                    <span class="lang-en" data-i18n="index.game5.desc">Pop balloons with letters before they fly away!</span>
+                    <span class="lang-fr" data-i18n="index.game5.desc">Éclatez les ballons avec des lettres avant qu'ils ne s'envolent !</span>
                 </p>
                 <div class="difficulty">
                     <div class="difficulty-dot active"></div>
@@ -299,8 +367,26 @@
                     <div class="difficulty-dot active"></div>
                 </div>
             </a>
+
+            <a href="game7-touchtyping.html" class="game-card">
+                <div class="game-icon">👐</div>
+                <h2 class="game-title">הקלדה עיוורת</h2>
+                <p class="game-title-en">Touch Typing Trainer</p>
+                <p class="game-description">
+                    למדו להקליד ללא הסתכלות על המקלדת!
+                </p>
+                <p class="game-description-en">
+                    Learn to type without looking at the keyboard!
+                </p>
+                <div class="difficulty">
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot active"></div>
+                    <div class="difficulty-dot active"></div>
+                </div>
+            </a>
         </div>
     </div>
+    <script src="localization.js"></script>
 </body>
 </html>
 

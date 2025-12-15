@@ -202,6 +202,42 @@
             z-index: 1000;
         }
 
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
         .instructions {
             color: white;
             text-align: center;
@@ -254,6 +290,18 @@
             transform: scale(0.95);
         }
 
+            .lang-selector {
+                flex-direction: row;
+                gap: 5px;
+                padding: 6px;
+            }
+
+            .lang-btn {
+                padding: 5px 8px;
+                font-size: 0.7em;
+            }
+        }
+
         @media (max-width: 768px) {
             .mobile-controls {
                 display: flex !important;
@@ -263,6 +311,11 @@
                 height: 100vh;
                 max-width: 100%;
                 border-radius: 0;
+            }
+
+            .lang-selector {
+                top: 10px;
+                left: 10px;
             }
 
             .header {
@@ -317,27 +370,38 @@
 </head>
 <body>
     <div class="game-container">
-        <a href="index.html" class="back-btn">← חזרה (Back)</a>
+        <a href="index.html" class="back-btn"><span data-i18n="common.back">חזרה</span></a>
         
         <div class="start-screen" id="startScreen">
-            <h1>רץ וקפוץ! 🏃<br><small style="font-size: 0.5em; opacity: 0.8;">Run and Jump!</small></h1>
+            <h1>
+                <span class="lang-he" data-i18n="game1.title">רץ וקפוץ! 🏃</span>
+                <span class="lang-en" data-i18n="game1.title">🏃 Run and Jump!</span>
+                <span class="lang-fr" data-i18n="game1.title">🏃 Courir et sauter !</span>
+            </h1>
             <div class="instructions">
-                <p><strong>לחצו על האות העברית הנכונה כדי לקפוץ מעל המכשולים!</strong><br>
-                <small style="opacity: 0.8;">Press the correct Hebrew letter to jump over obstacles!</small></p>
-                <p><strong>האות המבוקשת מוצגת למעלה במרכז המסך.</strong><br>
-                <small style="opacity: 0.8;">The target letter is displayed at the top center of the screen.</small></p>
-                <p><strong>לחצו על האות כשהמכשול מתקרב - אין צורך בטיימינג מדויק!</strong><br>
-                <small style="opacity: 0.8;">Press the letter when the obstacle approaches - precise timing not required!</small></p>
-                <p><strong>יש לכם 3 חיים. בהצלחה!</strong><br>
-                <small style="opacity: 0.8;">You have 3 lives. Good luck!</small></p>
+                <p class="lang-he"><strong data-i18n="game1.inst1">לחצו על האות העברית הנכונה כדי לקפוץ מעל המכשולים!</strong></p>
+                <p class="lang-en"><strong data-i18n="game1.inst1">Press the correct Hebrew letter to jump over obstacles!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game1.inst1">Appuyez sur la bonne lettre hébraïque pour sauter par-dessus les obstacles !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game1.inst2">האות המבוקשת מוצגת למעלה במרכז המסך.</strong></p>
+                <p class="lang-en"><strong data-i18n="game1.inst2">The target letter is displayed at the top center of the screen.</strong></p>
+                <p class="lang-fr"><strong data-i18n="game1.inst2">La lettre cible est affichée en haut au centre de l'écran.</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game1.inst3">לחצו על האות כשהמכשול מתקרב - אין צורך בטיימינג מדויק!</strong></p>
+                <p class="lang-en"><strong data-i18n="game1.inst3">Press the letter when the obstacle approaches - precise timing not required!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game1.inst3">Appuyez sur la lettre lorsque l'obstacle approche - le timing précis n'est pas nécessaire !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game1.inst4">יש לכם 3 חיים. בהצלחה!</strong></p>
+                <p class="lang-en"><strong data-i18n="game1.inst4">You have 3 lives. Good luck!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game1.inst4">Vous avez 3 vies. Bonne chance !</strong></p>
             </div>
-            <button onclick="startGame()">התחל משחק (Start Game)</button>
+            <button onclick="startGame()" data-i18n="common.startGame">התחל משחק</button>
         </div>
 
         <div class="header">
-            <div class="score"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
-            <div class="target-letter"><span class="stat-label">Press</span>לחץ: <span id="targetLetter">-</span></div>
-            <div class="lives"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div class="score"><span class="lang-he" data-i18n="common.score">ניקוד:</span><span class="lang-en" data-i18n="common.score">Score:</span><span class="lang-fr" data-i18n="common.score">Score :</span> <span id="score">0</span></div>
+            <div class="target-letter"><span class="lang-he">לחץ:</span><span class="lang-en">Press:</span><span class="lang-fr">Appuyez:</span> <span id="targetLetter">-</span></div>
+            <div class="lives"><span class="lang-he" data-i18n="common.lives">חיים:</span><span class="lang-en" data-i18n="common.lives">Lives:</span><span class="lang-fr" data-i18n="common.lives">Vies :</span> <span id="lives">❤️❤️❤️</span></div>
         </div>
 
         <div class="cloud" style="top: 50px; animation-delay: 0s;">☁️</div>
@@ -355,12 +419,22 @@
         </div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
-            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
-            <button onclick="restartGame()">שחק שוב (Play Again)</button>
+            <h1>
+                <span class="lang-he" data-i18n="common.gameOver">המשחק נגמר!</span>
+                <span class="lang-en" data-i18n="common.gameOver">Game Over!</span>
+                <span class="lang-fr" data-i18n="common.gameOver">Jeu terminé !</span>
+            </h1>
+            <p>
+                <strong class="lang-he" data-i18n="common.yourScore">הניקוד שלך:</strong>
+                <strong class="lang-en" data-i18n="common.yourScore">Your Score:</strong>
+                <strong class="lang-fr" data-i18n="common.yourScore">Votre score :</strong>
+                <span id="finalScore">0</span>
+            </p>
+            <button onclick="restartGame()" data-i18n="common.playAgain">שחק שוב</button>
         </div>
     </div>
 
+    <script src="localization.js"></script>
     <script>
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         

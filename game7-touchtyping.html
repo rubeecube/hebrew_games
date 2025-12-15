@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקלדה עיוורת - Touch Typing Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .lesson-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .lesson-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .lesson-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .lesson-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .typing-area {
+            margin-bottom: 30px;
+        }
+
+        .text-to-type {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 5px;
+            font-weight: bold;
+        }
+
+        .text-to-type .char {
+            display: inline-block;
+            padding: 0 3px;
+        }
+
+        .text-to-type .char.correct {
+            color: #28a745;
+        }
+
+        .text-to-type .char.incorrect {
+            color: #dc3545;
+            background: #ffe0e0;
+        }
+
+        .text-to-type .char.current {
+            background: #ffd700;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .input-area {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #typingInput {
+            width: 80%;
+            padding: 15px;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            direction: rtl;
+        }
+
+        #typingInput:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .keyboard {
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 8px;
+            gap: 5px;
+        }
+
+        .key {
+            background: linear-gradient(180deg, #ecf0f1 0%, #bdc3c7 100%);
+            border: 2px solid #34495e;
+            border-radius: 5px;
+            padding: 15px;
+            min-width: 50px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s;
+            box-shadow: 0 3px 0 #34495e;
+        }
+
+        .key:active {
+            transform: translateY(3px);
+            box-shadow: 0 0 0 #34495e;
+        }
+
+        .key.highlight {
+            background: linear-gradient(180deg, #ffd700 0%, #ffed4e 100%);
+            animation: keyPulse 0.5s infinite;
+            border-color: #f39c12;
+        }
+
+        .key.pressed {
+            background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .key.home-row {
+            background: linear-gradient(180deg, #a8dadc 0%, #81b3b6 100%);
+        }
+
+        .key.space {
+            min-width: 300px;
+        }
+
+        @keyframes keyPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hand-position {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+        }
+
+        .hand-position h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .hands {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .hand {
+            font-size: 1.2em;
+        }
+
+        .finger {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .finger.active {
+            color: #ff6b6b;
+            font-weight: bold;
+            transform: scale(1.3);
+            display: inline-block;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .message.success {
+            color: #28a745;
+        }
+
+        .message.error {
+            color: #dc3545;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-right: 5px solid #ffc107;
+        }
+
+        .instructions h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .key {
+                min-width: 35px;
+                padding: 10px 5px;
+                font-size: 1em;
+            }
+
+            .key.space {
+                min-width: 200px;
+            }
+
+            .text-to-type {
+                font-size: 1.5em;
+            }
+
+            #typingInput {
+                width: 95%;
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 מאמן הקלדה עיוורת</h1>
+
+        <div class="instructions">
+            <h3>📚 הוראות:</h3>
+            <p>
+                למד להקליד ללא הסתכלות על המקלדת! התחל משורת הבית (אשדגכעיחלךף) והתקדם לרמות קשות יותר.
+                שים את האצבעות על שורת הבית ועקוב אחר האות המודגשת על המקלדת.
+            </p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">מהירות (תווים/דקה)</div>
+                <div class="stat-value" id="wpm">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">דיוק</div>
+                <div class="stat-value" id="accuracy">100%</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">טעויות</div>
+                <div class="stat-value" id="errors">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">התקדמות</div>
+                <div class="stat-value" id="progress">0/0</div>
+            </div>
+        </div>
+
+        <div class="lesson-selector">
+            <button class="lesson-btn active" data-level="1">שורת בית</button>
+            <button class="lesson-btn" data-level="2">שורה עליונה</button>
+            <button class="lesson-btn" data-level="3">שורה תחתונה</button>
+            <button class="lesson-btn" data-level="4">כל האותיות</button>
+            <button class="lesson-btn" data-level="5">מילים</button>
+            <button class="lesson-btn" data-level="6">משפטים</button>
+        </div>
+
+        <div class="hand-position">
+            <h3>👐 מיקום ידיים</h3>
+            <div class="hands">
+                <div class="hand">
+                    <span>יד ימין: </span>
+                    <span class="finger" id="right-pinky">ך</span>
+                    <span class="finger" id="right-ring">ל</span>
+                    <span class="finger" id="right-middle">ח</span>
+                    <span class="finger" id="right-index">י/ע</span>
+                </div>
+                <div class="hand">
+                    <span>יד שמאל: </span>
+                    <span class="finger" id="left-index">כ/ג</span>
+                    <span class="finger" id="left-middle">ד</span>
+                    <span class="finger" id="left-ring">ש</span>
+                    <span class="finger" id="left-pinky">א/פ/ף</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-area">
+            <div class="text-to-type" id="textToType"></div>
+            <div class="input-area">
+                <input type="text" id="typingInput" placeholder="התחל להקליד כאן..." autocomplete="off">
+            </div>
+        </div>
+
+        <div class="keyboard">
+            <div class="keyboard-row">
+                <div class="key" data-key="~">~</div>
+                <div class="key" data-key="!">!</div>
+                <div class="key" data-key="@">@</div>
+                <div class="key" data-key="#">#</div>
+                <div class="key" data-key="$">$</div>
+                <div class="key" data-key="%">%</div>
+                <div class="key" data-key="^">^</div>
+                <div class="key" data-key="&">&</div>
+                <div class="key" data-key="*">*</div>
+                <div class="key" data-key="(">(</div>
+                <div class="key" data-key=")">)</div>
+                <div class="key" data-key="-">-</div>
+                <div class="key" data-key="=">=</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key" data-key="/">/</div>
+                <div class="key" data-key="'">'</div>
+                <div class="key" data-key="ק">ק</div>
+                <div class="key" data-key="ר">ר</div>
+                <div class="key" data-key="א">א</div>
+                <div class="key" data-key="ט">ט</div>
+                <div class="key" data-key="ו">ו</div>
+                <div class="key" data-key="ן">ן</div>
+                <div class="key" data-key="ם">ם</div>
+                <div class="key" data-key="פ">פ</div>
+                <div class="key" data-key="[">[</div>
+                <div class="key" data-key="]">]</div>
+                <div class="key" data-key="\\">\</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key home-row" data-key="ש">ש</div>
+                <div class="key home-row" data-key="ד">ד</div>
+                <div class="key home-row" data-key="ג">ג</div>
+                <div class="key home-row" data-key="כ">כ</div>
+                <div class="key home-row" data-key="ע">ע</div>
+                <div class="key home-row" data-key="י">י</div>
+                <div class="key home-row" data-key="ח">ח</div>
+                <div class="key home-row" data-key="ל">ל</div>
+                <div class="key home-row" data-key="ך">ך</div>
+                <div class="key home-row" data-key="ף">ף</div>
+                <div class="key" data-key=",">,</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key" data-key="ז">ז</div>
+                <div class="key" data-key="ס">ס</div>
+                <div class="key" data-key="ב">ב</div>
+                <div class="key" data-key="ה">ה</div>
+                <div class="key" data-key="נ">נ</div>
+                <div class="key" data-key="מ">מ</div>
+                <div class="key" data-key="צ">צ</div>
+                <div class="key" data-key="ת">ת</div>
+                <div class="key" data-key="ץ">ץ</div>
+                <div class="key" data-key=".">.</div>
+            </div>
+            <div class="keyboard-row">
+                <div class="key space" data-key=" ">רווח</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">התחל תרגיל חדש</button>
+            <button class="btn btn-secondary" id="resetBtn">אפס סטטיסטיקות</button>
+        </div>
+
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        const lessons = {
+            1: { // Home row
+                name: 'שורת בית',
+                chars: ['א', 'ש', 'ד', 'ג', 'כ', 'ע', 'י', 'ח', 'ל', 'ך', 'ף'],
+                type: 'chars'
+            },
+            2: { // Top row
+                name: 'שורה עליונה',
+                chars: ['ק', 'ר', 'א', 'ט', 'ו', 'ן', 'ם', 'פ'],
+                type: 'chars'
+            },
+            3: { // Bottom row
+                name: 'שורה תחתונה',
+                chars: ['ז', 'ס', 'ב', 'ה', 'נ', 'מ', 'צ', 'ת', 'ץ'],
+                type: 'chars'
+            },
+            4: { // All letters
+                name: 'כל האותיות',
+                chars: ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ך', 'ל', 'מ', 'ם', 'נ', 'ן', 'ס', 'ע', 'פ', 'ף', 'צ', 'ץ', 'ק', 'ר', 'ש', 'ת'],
+                type: 'chars'
+            },
+            5: { // Words
+                name: 'מילים',
+                words: ['שלום', 'ילד', 'ספר', 'בית', 'יום', 'לילה', 'אמא', 'אבא', 'כלב', 'חתול', 'עץ', 'פרח', 'מים', 'לחם', 'שמש', 'ירח', 'כוכב', 'ים', 'הר', 'נהר'],
+                type: 'words'
+            },
+            6: { // Sentences
+                name: 'משפטים',
+                sentences: [
+                    'שלום לכולם',
+                    'איך הולך היום',
+                    'אני אוהב לקרוא',
+                    'השמש זורחת בשמיים',
+                    'הילדים משחקים בגן',
+                    'אני לומד עברית',
+                    'זה יום יפה',
+                    'אני אוכל ארוחת בוקר',
+                    'החתול ישן על הספה',
+                    'אני הולך לבית הספר'
+                ],
+                type: 'sentences'
+            }
+        };
+
+        const fingerMap = {
+            // Right hand
+            'ך': 'right-pinky',
+            'ף': 'right-pinky',
+            'ל': 'right-ring',
+            'ח': 'right-middle',
+            'י': 'right-index',
+            'ע': 'right-index',
+            'ו': 'right-index',
+            'ן': 'right-ring',
+            'ם': 'right-pinky',
+            'פ': 'right-pinky',
+            // Left hand
+            'כ': 'left-index',
+            'ג': 'left-index',
+            'ד': 'left-middle',
+            'ש': 'left-ring',
+            'א': 'left-pinky',
+            'ק': 'left-pinky',
+            'ר': 'left-ring',
+            'ט': 'left-index',
+            'ז': 'left-pinky',
+            'ס': 'left-ring',
+            'ב': 'left-middle',
+            'ה': 'left-index',
+            'נ': 'left-index',
+            'מ': 'left-middle',
+            'צ': 'left-ring',
+            'ת': 'left-pinky',
+            'ץ': 'left-pinky',
+            ' ': 'both'
+        };
+
+        let currentLevel = 1;
+        let currentText = '';
+        let currentIndex = 0;
+        let errors = 0;
+        let totalChars = 0;
+        let startTime = null;
+        let isActive = false;
+
+        const typingInput = document.getElementById('typingInput');
+        const textToType = document.getElementById('textToType');
+        const wpmEl = document.getElementById('wpm');
+        const accuracyEl = document.getElementById('accuracy');
+        const errorsEl = document.getElementById('errors');
+        const progressEl = document.getElementById('progress');
+        const messageEl = document.getElementById('message');
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // Lesson selection
+        document.querySelectorAll('.lesson-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLevel = parseInt(btn.dataset.level);
+                startNewExercise();
+            });
+        });
+
+        function generateText(level) {
+            const lesson = lessons[level];
+            let text = '';
+
+            if (lesson.type === 'chars') {
+                const length = 20;
+                for (let i = 0; i < length; i++) {
+                    text += lesson.chars[Math.floor(Math.random() * lesson.chars.length)];
+                    if (i < length - 1 && Math.random() > 0.7) {
+                        text += ' ';
+                    }
+                }
+            } else if (lesson.type === 'words') {
+                const count = 5;
+                for (let i = 0; i < count; i++) {
+                    text += lesson.words[Math.floor(Math.random() * lesson.words.length)];
+                    if (i < count - 1) text += ' ';
+                }
+            } else if (lesson.type === 'sentences') {
+                text = lesson.sentences[Math.floor(Math.random() * lesson.sentences.length)];
+            }
+
+            return text;
+        }
+
+        function displayText() {
+            textToType.innerHTML = '';
+            for (let i = 0; i < currentText.length; i++) {
+                const span = document.createElement('span');
+                span.className = 'char';
+                span.textContent = currentText[i];
+                if (i === currentIndex) {
+                    span.classList.add('current');
+                }
+                textToType.appendChild(span);
+            }
+            highlightKey(currentText[currentIndex]);
+            highlightFinger(currentText[currentIndex]);
+        }
+
+        function highlightKey(char) {
+            document.querySelectorAll('.key').forEach(key => {
+                key.classList.remove('highlight');
+            });
+            if (char) {
+                const key = document.querySelector(`.key[data-key="${char}"]`);
+                if (key) {
+                    key.classList.add('highlight');
+                }
+            }
+        }
+
+        function highlightFinger(char) {
+            document.querySelectorAll('.finger').forEach(finger => {
+                finger.classList.remove('active');
+            });
+            const fingerId = fingerMap[char];
+            if (fingerId) {
+                if (fingerId === 'both') {
+                    document.getElementById('left-index').classList.add('active');
+                    document.getElementById('right-index').classList.add('active');
+                } else {
+                    const finger = document.getElementById(fingerId);
+                    if (finger) {
+                        finger.classList.add('active');
+                    }
+                }
+            }
+        }
+
+        function updateStats() {
+            const elapsed = startTime ? (Date.now() - startTime) / 1000 / 60 : 0;
+            const wpm = elapsed > 0 ? Math.round(totalChars / elapsed) : 0;
+            const accuracy = totalChars > 0 ? Math.round(((totalChars - errors) / totalChars) * 100) : 100;
+
+            wpmEl.textContent = wpm;
+            accuracyEl.textContent = accuracy + '%';
+            errorsEl.textContent = errors;
+            progressEl.textContent = `${currentIndex}/${currentText.length}`;
+        }
+
+        function startNewExercise() {
+            currentText = generateText(currentLevel);
+            currentIndex = 0;
+            isActive = true;
+            startTime = null;
+            typingInput.value = '';
+            typingInput.disabled = false;
+            typingInput.focus();
+            displayText();
+            updateStats();
+            messageEl.textContent = '';
+            messageEl.className = 'message';
+        }
+
+        function handleInput(e) {
+            if (!isActive) return;
+
+            if (!startTime) {
+                startTime = Date.now();
+            }
+
+            const inputChar = e.data;
+            const expectedChar = currentText[currentIndex];
+
+            if (inputChar === expectedChar) {
+                // Correct
+                const charSpan = textToType.children[currentIndex];
+                charSpan.classList.remove('current');
+                charSpan.classList.add('correct');
+                
+                // Visual feedback
+                const key = document.querySelector(`.key[data-key="${expectedChar}"]`);
+                if (key) {
+                    key.classList.add('pressed');
+                    setTimeout(() => key.classList.remove('pressed'), 200);
+                }
+
+                currentIndex++;
+                totalChars++;
+
+                if (currentIndex >= currentText.length) {
+                    // Exercise complete
+                    isActive = false;
+                    typingInput.disabled = true;
+                    messageEl.textContent = '🎉 כל הכבוד! השלמת את התרגיל!';
+                    messageEl.className = 'message success';
+                    highlightKey(null);
+                    highlightFinger(null);
+                } else {
+                    displayText();
+                }
+            } else {
+                // Incorrect
+                errors++;
+                totalChars++;
+                const charSpan = textToType.children[currentIndex];
+                charSpan.classList.add('incorrect');
+                setTimeout(() => charSpan.classList.remove('incorrect'), 300);
+                
+                messageEl.textContent = `❌ טעות! לחץ על: ${expectedChar}`;
+                messageEl.className = 'message error';
+                setTimeout(() => {
+                    messageEl.textContent = '';
+                    messageEl.className = 'message';
+                }, 1000);
+            }
+
+            typingInput.value = '';
+            updateStats();
+        }
+
+        // Keyboard visualization
+        document.addEventListener('keydown', (e) => {
+            if (!isActive) return;
+            
+            const key = document.querySelector(`.key[data-key="${e.key}"]`);
+            if (key) {
+                key.classList.add('pressed');
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            const key = document.querySelector(`.key[data-key="${e.key}"]`);
+            if (key) {
+                setTimeout(() => key.classList.remove('pressed'), 100);
+            }
+        });
+
+        typingInput.addEventListener('input', handleInput);
+
+        startBtn.addEventListener('click', startNewExercise);
+
+        resetBtn.addEventListener('click', () => {
+            errors = 0;
+            totalChars = 0;
+            startTime = null;
+            updateStats();
+            startNewExercise();
+        });
+
+        // Initialize
+        startNewExercise();
+    </script>
+</body>
+</html>
+

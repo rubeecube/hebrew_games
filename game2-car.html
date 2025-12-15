@@ -298,6 +298,42 @@
             z-index: 1000;
         }
 
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 6px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
         .instructions {
             color: white;
             text-align: center;
@@ -440,34 +476,59 @@
                 padding: 8px 15px;
                 font-size: 0.9em;
             }
+
+            .lang-selector {
+                top: 10px;
+                left: 10px;
+                gap: 5px;
+                padding: 6px;
+            }
+
+            .lang-btn {
+                padding: 5px 8px;
+                font-size: 0.7em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <a href="index.html" class="back-btn">← חזרה (Back)</a>
+        <a href="index.html" class="back-btn"><span data-i18n="common.back">חזרה</span></a>
         
         <div class="start-screen" id="startScreen">
-            <h1>מכונית עברית! 🚗<br><small style="font-size: 0.5em; opacity: 0.8;">Hebrew Car!</small></h1>
+            <h1>
+                <span class="lang-he" data-i18n="game2.title">מכונית עברית! 🚗</span>
+                <span class="lang-en" data-i18n="game2.title">🚗 Hebrew Car!</span>
+                <span class="lang-fr" data-i18n="game2.title">🚗 Voiture hébraïque !</span>
+            </h1>
             <div class="instructions">
-                <p><strong>נווטו את המכונית ימינה ושמאלה בעזרת אותיות עבריות!</strong><br>
-                <small style="opacity: 0.8;">Navigate the car left and right using Hebrew letters!</small></p>
-                <p><strong>לחצו על האות המתאימה כדי לנוע:</strong><br>
-                <small style="opacity: 0.8;">Press the matching letter to move:</small></p>
-                <p><strong>השתמשו באותיות כדי לנוע בין נתיבים</strong><br>
-                <small style="opacity: 0.8;">Use the letters to move between lanes</small></p>
-                <p><strong>הימנעו ממכשולים ואספו מטבעות!</strong><br>
-                <small style="opacity: 0.8;">Avoid obstacles and collect coins!</small></p>
-                <p><strong>⚠️ שימו לב: אחת האותיות משתנה כל 5 שניות!</strong><br>
-                <small style="opacity: 0.8;">Warning: One letter changes every 5 seconds!</small></p>
+                <p class="lang-he"><strong data-i18n="game2.inst1">נווטו את המכונית ימינה ושמאלה בעזרת אותיות עבריות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game2.inst1">Navigate the car left and right using Hebrew letters!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game2.inst1">Naviguez la voiture à gauche et à droite en utilisant des lettres hébraïques !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game2.inst2">לחצו על האות המתאימה כדי לנוע:</strong></p>
+                <p class="lang-en"><strong data-i18n="game2.inst2">Press the matching letter to move:</strong></p>
+                <p class="lang-fr"><strong data-i18n="game2.inst2">Appuyez sur la lettre correspondante pour vous déplacer :</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game2.inst3">השתמשו באותיות כדי לנוע בין נתיבים</strong></p>
+                <p class="lang-en"><strong data-i18n="game2.inst3">Use the letters to move between lanes</strong></p>
+                <p class="lang-fr"><strong data-i18n="game2.inst3">Utilisez les lettres pour vous déplacer entre les voies</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game2.inst4">הימנעו ממכשולים ואספו מטבעות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game2.inst4">Avoid obstacles and collect coins!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game2.inst4">Évitez les obstacles et collectez des pièces !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game2.inst5">⚠️ שימו לב: אחת האותיות משתנה כל 5 שניות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game2.inst5">⚠️ Warning: One letter changes every 5 seconds!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game2.inst5">⚠️ Attention : Une lettre change toutes les 5 secondes !</strong></p>
             </div>
-            <button onclick="startGame()">התחל משחק (Start Game)</button>
+            <button onclick="startGame()" data-i18n="common.startGame">התחל משחק</button>
         </div>
 
         <div class="header">
-            <div class="score"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
-            <div class="speed"><span class="stat-label">Speed</span>מהירות: <span id="speed">1x</span></div>
-            <div class="lives"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div class="score"><span class="lang-he" data-i18n="common.score">ניקוד:</span><span class="lang-en" data-i18n="common.score">Score:</span><span class="lang-fr" data-i18n="common.score">Score :</span> <span id="score">0</span></div>
+            <div class="speed"><span class="lang-he" data-i18n="common.speed">מהירות:</span><span class="lang-en" data-i18n="common.speed">Speed:</span><span class="lang-fr" data-i18n="common.speed">Vitesse :</span> <span id="speed">1x</span></div>
+            <div class="lives"><span class="lang-he" data-i18n="common.lives">חיים:</span><span class="lang-en" data-i18n="common.lives">Lives:</span><span class="lang-fr" data-i18n="common.lives">Vies :</span> <span id="lives">❤️❤️❤️</span></div>
         </div>
 
         <div class="road">
@@ -476,7 +537,11 @@
         </div>
 
         <div class="key-display" id="keyDisplay">
-            <div class="key-instruction">לחץ על: <small style="font-size: 0.7em; opacity: 0.7;">(Press)</small></div>
+            <div class="key-instruction">
+                <span class="lang-he" data-i18n="game2.press">לחץ על:</span>
+                <span class="lang-en" data-i18n="game2.press">Press:</span>
+                <span class="lang-fr" data-i18n="game2.press">Appuyez :</span>
+            </div>
             <div class="key-options">
                 <span class="key-option"><span id="rightKey">-</span> ⬅️</span>
                 <span class="key-option"><span id="centerKey">-</span> ⬆️</span>
@@ -491,12 +556,22 @@
         </div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
-            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
-            <button onclick="restartGame()">שחק שוב (Play Again)</button>
+            <h1>
+                <span class="lang-he" data-i18n="common.gameOver">המשחק נגמר!</span>
+                <span class="lang-en" data-i18n="common.gameOver">Game Over!</span>
+                <span class="lang-fr" data-i18n="common.gameOver">Jeu terminé !</span>
+            </h1>
+            <p>
+                <strong class="lang-he" data-i18n="common.yourScore">הניקוד שלך:</strong>
+                <strong class="lang-en" data-i18n="common.yourScore">Your Score:</strong>
+                <strong class="lang-fr" data-i18n="common.yourScore">Votre score :</strong>
+                <span id="finalScore">0</span>
+            </p>
+            <button onclick="restartGame()" data-i18n="common.playAgain">שחק שוב</button>
         </div>
     </div>
 
+    <script src="localization.js"></script>
     <script>
         // Hebrew keyboard layout (as it appears on physical keyboard, left to right)
         const hebrewKeyboard = [
