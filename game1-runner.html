@@ -84,26 +84,21 @@
 
         .player {
             position: absolute;
-            bottom: 150px;
+            bottom: 100px;
             right: 100px;
             width: 50px;
             height: 50px;
             font-size: 50px;
-            transition: bottom 0.1s ease;
+            transition: bottom 0.2s ease;
         }
 
         .player.jumping {
-            animation: jump 0.5s ease;
-        }
-
-        @keyframes jump {
-            0%, 100% { bottom: 150px; }
-            50% { bottom: 300px; }
+            bottom: 250px;
         }
 
         .obstacle {
             position: absolute;
-            bottom: 150px;
+            bottom: 100px;
             font-size: 2em;
             font-weight: bold;
             color: white;
@@ -316,6 +311,8 @@
         let obstacleInterval;
         let gameSpeed = 4000;
         let jumpMarkedTime = 0;
+        let isKeyPressed = false;
+        let currentPressedKey = '';
 
         const player = document.getElementById('player');
         const scoreEl = document.getElementById('score');
@@ -333,20 +330,58 @@
                 const btn = document.createElement('button');
                 btn.className = 'mobile-key-btn';
                 btn.textContent = letter;
+                
+                // Touch start - begin jump
                 btn.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     if (!gameActive) return;
+                    currentPressedKey = letter;
+                    isKeyPressed = true;
                     if (letter === currentLetter) {
                         jump();
                     }
                 });
-                btn.addEventListener('click', (e) => {
+                
+                // Touch end - stop jump
+                btn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (currentPressedKey === letter) {
+                        isKeyPressed = false;
+                        currentPressedKey = '';
+                        stopJump();
+                    }
+                });
+                
+                // Mouse down - begin jump
+                btn.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     if (!gameActive) return;
+                    currentPressedKey = letter;
+                    isKeyPressed = true;
                     if (letter === currentLetter) {
                         jump();
                     }
                 });
+                
+                // Mouse up - stop jump
+                btn.addEventListener('mouseup', (e) => {
+                    e.preventDefault();
+                    if (currentPressedKey === letter) {
+                        isKeyPressed = false;
+                        currentPressedKey = '';
+                        stopJump();
+                    }
+                });
+                
+                // Mouse leave - stop jump if dragged out
+                btn.addEventListener('mouseleave', (e) => {
+                    if (currentPressedKey === letter) {
+                        isKeyPressed = false;
+                        currentPressedKey = '';
+                        stopJump();
+                    }
+                });
+                
                 mobileControls.appendChild(btn);
             });
         }
@@ -360,14 +395,26 @@
         }
 
         function jump() {
-            if (player.classList.contains('jumping')) return;
-            
-            jumpMarkedTime = Date.now();
+            if (!player.classList.contains('jumping')) {
+                jumpMarkedTime = Date.now();
+            }
             player.classList.add('jumping');
-            setTimeout(() => {
-                player.classList.remove('jumping');
-            }, 500);
         }
+
+        function stopJump() {
+            player.classList.remove('jumping');
+        }
+
+        function updateJumpState() {
+            if (gameActive && isKeyPressed && currentPressedKey === currentLetter) {
+                jump();
+            } else {
+                stopJump();
+            }
+        }
+
+        // Keep updating jump state
+        setInterval(updateJumpState, 50);
 
         function createObstacle() {
             if (!gameActive) return;
@@ -395,9 +442,8 @@
                 const obstacleRect = obstacle.getBoundingClientRect();
                 const playerRect = player.getBoundingClientRect();
                 
-                // Check if player jumped recently (within generous time window)
-                const timeSinceJump = Date.now() - jumpMarkedTime;
-                if (timeSinceJump < 1500 && !jumped) {
+                // Check if player is jumping (in the air)
+                if (player.classList.contains('jumping') && !jumped) {
                     jumped = true;
                 }
 
@@ -433,11 +479,14 @@
             lives = 3;
             gameSpeed = 4000;
             jumpMarkedTime = 0;
+            isKeyPressed = false;
+            currentPressedKey = '';
             
             scoreEl.textContent = score;
             updateLives();
             startScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
+            stopJump();
             
             // Create mobile buttons if not already created
             if (mobileControls.children.length === 0) {
@@ -458,6 +507,11 @@
             gameActive = false;
             clearInterval(obstacleInterval);
             
+            // Reset jump state
+            isKeyPressed = false;
+            currentPressedKey = '';
+            stopJump();
+            
             // Remove all obstacles
             document.querySelectorAll('.obstacle').forEach(o => o.remove());
             
@@ -470,25 +524,29 @@
             startGame();
         }
 
-        // Keyboard event listener
-        document.addEventListener('keypress', (e) => {
+        // Keyboard event listener - key down
+        document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
+            if (e.repeat) return; // Ignore key repeat
             
             const pressedKey = e.key;
+            currentPressedKey = pressedKey;
+            isKeyPressed = true;
             
             if (pressedKey === currentLetter) {
                 jump();
             }
         });
 
-        // Also support keydown for better compatibility
-        document.addEventListener('keydown', (e) => {
+        // Keyboard event listener - key up
+        document.addEventListener('keyup', (e) => {
             if (!gameActive) return;
             
-            const pressedKey = e.key;
-            
-            if (pressedKey === currentLetter) {
-                jump();
+            const releasedKey = e.key;
+            if (releasedKey === currentPressedKey) {
+                isKeyPressed = false;
+                currentPressedKey = '';
+                stopJump();
             }
         });
     </script>
