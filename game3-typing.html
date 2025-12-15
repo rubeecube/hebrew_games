@@ -52,7 +52,7 @@
             background: #f8f9fa;
             padding: 30px;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             min-height: 120px;
             display: flex;
             align-items: center;
@@ -65,6 +65,28 @@
             color: #2c3e50;
             text-align: center;
             user-select: none;
+        }
+
+        .translation-display {
+            background: #e8f4f8;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .translation-text {
+            font-size: 1em;
+            color: #555;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .translation-label {
+            font-size: 0.85em;
+            color: #888;
+            margin-right: 8px;
+            font-weight: bold;
         }
 
         .char {
@@ -310,6 +332,13 @@
             <div class="sentence-text" id="sentenceDisplay">לחץ "התחל" כדי להתחיל</div>
         </div>
 
+        <div class="translation-display" id="translationDisplay">
+            <div class="translation-text">
+                <span class="translation-label">🇬🇧</span><span id="englishTranslation">Press "Start" to begin</span><br>
+                <span class="translation-label">🇫🇷</span><span id="frenchTranslation">Appuyez sur "Démarrer" pour commencer</span>
+            </div>
+        </div>
+
         <div class="input-area">
             <input 
                 type="text" 
@@ -391,8 +420,48 @@
             ]
         };
 
+        const translations = {
+            easy: [
+                { en: "The sun shines in the blue sky", fr: "Le soleil brille dans le ciel bleu" },
+                { en: "The children play in the public garden", fr: "Les enfants jouent dans le jardin public" },
+                { en: "The dog runs fast in the street", fr: "Le chien court vite dans la rue" },
+                { en: "I love eating fresh fruits", fr: "J'aime manger des fruits frais" },
+                { en: "The teacher teaches the students", fr: "L'enseignante enseigne aux élèves" },
+                { en: "The book is on the table", fr: "Le livre est sur la table" },
+                { en: "The water is cold and clear", fr: "L'eau est froide et claire" },
+                { en: "The tree is tall and very beautiful", fr: "L'arbre est grand et très beau" },
+                { en: "The bird sings in the morning", fr: "L'oiseau chante le matin" },
+                { en: "The cat sleeps on the armchair", fr: "Le chat dort sur le fauteuil" }
+            ],
+            medium: [
+                { en: "The new government announced a comprehensive economic plan", fr: "Le nouveau gouvernement a annoncé un plan économique complet" },
+                { en: "Scientists discovered a new planet in the solar system", fr: "Les scientifiques ont découvert une nouvelle planète dans le système solaire" },
+                { en: "The weather forecast promises sun and heat on the weekend", fr: "Les prévisions météo promettent du soleil et de la chaleur ce week-end" },
+                { en: "The president met with leaders of neighboring countries", fr: "Le président a rencontré les dirigeants des pays voisins" },
+                { en: "The Israeli technology company raised millions of dollars", fr: "L'entreprise technologique israélienne a levé des millions de dollars" },
+                { en: "Doctors recommend a healthy and active lifestyle", fr: "Les médecins recommandent un mode de vie sain et actif" },
+                { en: "The city plans to build a new public park downtown", fr: "La ville prévoit de construire un nouveau parc public au centre-ville" },
+                { en: "Israeli athletes won medals at the Olympics", fr: "Les athlètes israéliens ont remporté des médailles aux Jeux olympiques" },
+                { en: "The university is opening a new study program", fr: "L'université ouvre un nouveau programme d'études" },
+                { en: "The Israeli high-tech industry continues to grow", fr: "L'industrie high-tech israélienne continue de croître" }
+            ],
+            hard: [
+                { en: "The Knesset approved the controversial bill in first reading yesterday", fr: "La Knesset a approuvé hier en première lecture le projet de loi controversé" },
+                { en: "The Ministry of Health published new data indicating an increase in patients", fr: "Le ministère de la Santé a publié de nouvelles données indiquant une augmentation des patients" },
+                { en: "Negotiations between the parties have continued for three weeks without significant progress", fr: "Les négociations entre les parties se poursuivent depuis trois semaines sans progrès significatif" },
+                { en: "Researchers at Hebrew University developed innovative technology for treating diseases", fr: "Les chercheurs de l'Université hébraïque ont développé une technologie innovante pour traiter les maladies" },
+                { en: "The stock exchange ended trading down three percent", fr: "La bourse a terminé les échanges en baisse de trois pour cent" },
+                { en: "The Prime Minister announced the establishment of a state commission of inquiry", fr: "Le Premier ministre a annoncé la création d'une commission d'enquête d'État" },
+                { en: "The Ministry of Education is planning a comprehensive reform in the Israeli education system", fr: "Le ministère de l'Éducation planifie une réforme complète du système éducatif israélien" },
+                { en: "Bank of Israel decided to keep interest rates unchanged this month", fr: "La Banque d'Israël a décidé de maintenir les taux d'intérêt inchangés ce mois-ci" },
+                { en: "Police launched an extensive investigation following complaints of corruption in the public sector", fr: "La police a lancé une enquête approfondie suite à des plaintes de corruption dans le secteur public" },
+                { en: "Experts predict a significant increase in housing prices during the coming year", fr: "Les experts prévoient une augmentation significative des prix de l'immobilier au cours de l'année à venir" }
+            ]
+        };
+
         let currentDifficulty = 'easy';
         let currentSentences = [];
+        let currentTranslations = [];
         let currentSentenceIndex = 0;
         let currentSentence = '';
         let typedText = '';
@@ -406,6 +475,8 @@
 
         const typingInput = document.getElementById('typingInput');
         const sentenceDisplay = document.getElementById('sentenceDisplay');
+        const englishTranslation = document.getElementById('englishTranslation');
+        const frenchTranslation = document.getElementById('frenchTranslation');
         const startBtn = document.getElementById('startBtn');
         const skipBtn = document.getElementById('skipBtn');
         const gameOverScreen = document.getElementById('gameOver');
@@ -435,6 +506,11 @@
             }
 
             currentSentence = currentSentences[currentSentenceIndex];
+            const translation = currentTranslations[currentSentenceIndex];
+            
+            englishTranslation.textContent = translation.en;
+            frenchTranslation.textContent = translation.fr;
+            
             typedText = '';
             typingInput.value = '';
             startTime = Date.now();
@@ -483,7 +559,13 @@
         }
 
         function startGame() {
-            currentSentences = shuffleArray(sentences[currentDifficulty]);
+            // Shuffle sentences and translations together
+            const indices = Array.from({length: sentences[currentDifficulty].length}, (_, i) => i);
+            const shuffledIndices = shuffleArray(indices);
+            
+            currentSentences = shuffledIndices.map(i => sentences[currentDifficulty][i]);
+            currentTranslations = shuffledIndices.map(i => translations[currentDifficulty][i]);
+            
             currentSentenceIndex = 0;
             totalChars = 0;
             correctChars = 0;
@@ -534,6 +616,8 @@
             startBtn.disabled = false;
             skipBtn.disabled = true;
             sentenceDisplay.textContent = 'לחץ "התחל" כדי להתחיל';
+            englishTranslation.textContent = 'Press "Start" to begin';
+            frenchTranslation.textContent = 'Appuyez sur "Démarrer" pour commencer';
             totalChars = 0;
             correctChars = 0;
             sentencesCompleted = 0;

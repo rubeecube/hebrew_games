@@ -191,11 +191,11 @@
 
         .key-display {
             position: absolute;
-            bottom: 150px;
+            bottom: 130px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255,255,255,0.95);
-            padding: 20px 40px;
+            padding: 15px 30px;
             border-radius: 20px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
             z-index: 60;
@@ -218,6 +218,15 @@
             font-size: 2em;
             font-weight: bold;
             color: #667eea;
+        }
+
+        .key-option.blink {
+            animation: keyBlink 0.5s ease 3;
+        }
+
+        @keyframes keyBlink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); background: rgba(102, 126, 234, 0.2); border-radius: 10px; }
         }
 
         .game-over, .start-screen {
@@ -300,6 +309,7 @@
                 <p>לחצו על האות המתאימה כדי לנוע:</p>
                 <p><strong>שמאל ⬅️ | מרכז ⬆️ | ימין ➡️</strong></p>
                 <p>הימנעו ממכשולים ואספו מטבעות!</p>
+                <p><strong>⚠️ שימו לב: אחת האותיות משתנה כל 5 שניות!</strong></p>
             </div>
             <button onclick="startGame()">התחל משחק</button>
         </div>
@@ -342,6 +352,7 @@
         let currentLane = 'center'; // left, center, right
         let obstacleInterval;
         let coinInterval;
+        let changeKeyInterval;
         let gameSpeed = 2000;
         let animationSpeed = 3;
         
@@ -379,6 +390,46 @@
             leftKeyEl.textContent = leftKey;
             centerKeyEl.textContent = centerKey;
             rightKeyEl.textContent = rightKey;
+        }
+
+        function changeOneKey() {
+            if (!gameActive) return;
+            
+            // Choose a random key position to change
+            const positions = ['left', 'center', 'right'];
+            const positionToChange = positions[Math.floor(Math.random() * positions.length)];
+            
+            // Get a new letter that's different from all current keys
+            let newLetter;
+            do {
+                newLetter = getRandomLetter();
+            } while (newLetter === leftKey || newLetter === centerKey || newLetter === rightKey);
+            
+            // Get the element and add blink animation
+            let keyEl;
+            if (positionToChange === 'left') {
+                keyEl = leftKeyEl;
+                leftKey = newLetter;
+            } else if (positionToChange === 'center') {
+                keyEl = centerKeyEl;
+                centerKey = newLetter;
+            } else {
+                keyEl = rightKeyEl;
+                rightKey = newLetter;
+            }
+            
+            // Add blink class
+            keyEl.parentElement.classList.add('blink');
+            
+            // Change the key after first blink
+            setTimeout(() => {
+                keyEl.textContent = newLetter;
+            }, 250);
+            
+            // Remove blink class after animation
+            setTimeout(() => {
+                keyEl.parentElement.classList.remove('blink');
+            }, 1500);
         }
 
         function updateLives() {
@@ -521,12 +572,18 @@
             coinInterval = setInterval(() => {
                 createCoin();
             }, 1500);
+
+            // Change one key every 5 seconds
+            changeKeyInterval = setInterval(() => {
+                changeOneKey();
+            }, 5000);
         }
 
         function endGame() {
             gameActive = false;
             clearInterval(obstacleInterval);
             clearInterval(coinInterval);
+            clearInterval(changeKeyInterval);
             
             // Remove all obstacles and coins
             document.querySelectorAll('.obstacle, .coin').forEach(o => o.remove());

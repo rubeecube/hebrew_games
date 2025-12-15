@@ -77,8 +77,8 @@
 
         .player {
             position: absolute;
-            bottom: 100px;
-            left: 100px;
+            bottom: 150px;
+            right: 100px;
             width: 50px;
             height: 50px;
             font-size: 50px;
@@ -90,25 +90,25 @@
         }
 
         @keyframes jump {
-            0%, 100% { bottom: 100px; }
-            50% { bottom: 250px; }
+            0%, 100% { bottom: 150px; }
+            50% { bottom: 300px; }
         }
 
         .obstacle {
             position: absolute;
-            bottom: 100px;
+            bottom: 150px;
             font-size: 2em;
             font-weight: bold;
             color: white;
             background: rgba(231, 76, 60, 0.8);
             padding: 10px 15px;
             border-radius: 10px;
-            animation: moveLeft 3s linear;
+            animation: moveLeft 4s linear;
         }
 
         @keyframes moveLeft {
-            from { right: -100px; }
-            to { right: 100%; }
+            from { left: -100px; }
+            to { left: 100%; }
         }
 
         .cloud {
@@ -200,8 +200,9 @@
             <h1>רץ וקפוץ! 🏃</h1>
             <div class="instructions">
                 <p>לחצו על האות העברית הנכונה כדי לקפוץ מעל המכשולים!</p>
-                <p>כל מכשול מציג אות - לחצו על האות הנכונה במקלדת כדי לקפוץ.</p>
-                <p>אם תפספסו, תאבדו חיים. יש לכם 3 חיים!</p>
+                <p>האות המבוקשת מוצגת למעלה במרכז המסך.</p>
+                <p>לחצו על האות כשהמכשול מתקרב - אין צורך בטיימינג מדויק!</p>
+                <p>יש לכם 3 חיים. בהצלחה!</p>
             </div>
             <button onclick="startGame()">התחל משחק</button>
         </div>
@@ -237,7 +238,8 @@
         let currentLetter = '';
         let gameActive = false;
         let obstacleInterval;
-        let gameSpeed = 3000;
+        let gameSpeed = 4000;
+        let jumpMarkedTime = 0;
 
         const player = document.getElementById('player');
         const scoreEl = document.getElementById('score');
@@ -259,6 +261,7 @@
         function jump() {
             if (player.classList.contains('jumping')) return;
             
+            jumpMarkedTime = Date.now();
             player.classList.add('jumping');
             setTimeout(() => {
                 player.classList.remove('jumping');
@@ -277,7 +280,8 @@
             obstacle.style.animationDuration = (gameSpeed / 1000) + 's';
             
             gameContainer.appendChild(obstacle);
-
+            
+            const obstacleCreatedTime = Date.now();
             let jumped = false;
             let passed = false;
 
@@ -289,6 +293,12 @@
 
                 const obstacleRect = obstacle.getBoundingClientRect();
                 const playerRect = player.getBoundingClientRect();
+                
+                // Check if player jumped recently (within generous time window)
+                const timeSinceJump = Date.now() - jumpMarkedTime;
+                if (timeSinceJump < 1500 && !jumped) {
+                    jumped = true;
+                }
 
                 // Check if obstacle passed the player
                 if (obstacleRect.right < playerRect.left && !passed) {
@@ -314,20 +324,14 @@
                     obstacle.remove();
                 }
             }, 50);
-
-            // Mark as jumped when player jumps at the right time
-            const jumpWindow = setTimeout(() => {
-                if (player.classList.contains('jumping')) {
-                    jumped = true;
-                }
-            }, gameSpeed - 800);
         }
 
         function startGame() {
             gameActive = true;
             score = 0;
             lives = 3;
-            gameSpeed = 3000;
+            gameSpeed = 4000;
+            jumpMarkedTime = 0;
             
             scoreEl.textContent = score;
             updateLives();
@@ -337,9 +341,9 @@
             // Create obstacles periodically
             obstacleInterval = setInterval(() => {
                 createObstacle();
-                // Gradually increase difficulty
-                if (gameSpeed > 1500) {
-                    gameSpeed -= 50;
+                // Gradually increase difficulty (slower progression)
+                if (gameSpeed > 2500) {
+                    gameSpeed -= 100;
                 }
             }, gameSpeed);
         }
