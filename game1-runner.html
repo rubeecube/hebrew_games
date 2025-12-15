@@ -84,7 +84,7 @@
 
         .player {
             position: absolute;
-            bottom: 140px;
+            bottom: 110px;
             right: 100px;
             width: 50px;
             height: 50px;
@@ -93,12 +93,12 @@
         }
 
         .player.jumping {
-            bottom: 280px;
+            bottom: 240px;
         }
 
         .obstacle {
             position: absolute;
-            bottom: 140px;
+            bottom: 110px;
             font-size: 2em;
             font-weight: bold;
             color: white;
@@ -184,7 +184,7 @@
             text-decoration: none;
             border-radius: 20px;
             font-weight: bold;
-            z-index: 100;
+            z-index: 1000;
         }
 
         .instructions {
@@ -289,6 +289,13 @@
 
             .game-over h1, .start-screen h1 {
                 margin-bottom: 10px;
+            }
+
+            .back-btn {
+                top: 10px;
+                right: 10px;
+                padding: 8px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
