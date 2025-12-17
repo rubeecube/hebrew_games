@@ -205,6 +205,42 @@
             box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
         }
 
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
         .back-btn {
             position: absolute;
             top: 20px;
@@ -283,25 +319,62 @@
 </head>
 <body>
     <div class="game-container" id="gameContainer">
-        <a href="index.html" class="back-btn">← חזרה (Back)</a>
+        <div class="lang-selector">
+            <button class="lang-btn active" data-lang="he" onclick="setLanguage('he')">🇮🇱 עברית</button>
+            <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 English</button>
+            <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
+        </div>
+        <a href="index.html" class="back-btn">
+            <span class="lang-he" data-i18n="common.back">← חזרה</span>
+            <span class="lang-en" data-i18n="common.back">← Back</span>
+            <span class="lang-fr" data-i18n="common.back">← Retour</span>
+        </a>
         
         <div class="start-screen" id="startScreen">
-            <h1>🫧 בועות אותיות!<br><small style="font-size: 0.5em; opacity: 0.8;">Letter Bubbles!</small></h1>
+            <h1>
+                <span class="lang-he" data-i18n="game8.title">🫧 בועות אותיות!</span>
+                <span class="lang-en" data-i18n="game8.title">🫧 Letter Bubbles!</span>
+                <span class="lang-fr" data-i18n="game8.title">🫧 Bulles de lettres !</span>
+            </h1>
             <div class="instructions">
-                <p><strong>פוצצו את כל הבועות לפני שהזמן אוזל!</strong><br>
-                <small style="opacity: 0.8;">Pop all bubbles before time runs out!</small></p>
-                <p><strong>הקלידו את האות שעל הבועה כדי לפוצץ אותה!</strong><br>
-                <small style="opacity: 0.8;">Type the letter on the bubble to pop it!</small></p>
-                <p><strong>קומבו: פצצו מהר למקבץ נקודות!</strong><br>
-                <small style="opacity: 0.8;">Combo: Pop fast for bonus points!</small></p>
+                <p class="lang-he"><strong data-i18n="game8.inst1">הקלידו את האות כדי לפוצץ בועות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game8.inst1">Type the letter to pop bubbles!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game8.inst1">Tapez la lettre pour éclater les bulles !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game8.inst2">פוצצו בועות במהירות לקומבו!</strong></p>
+                <p class="lang-en"><strong data-i18n="game8.inst2">Pop bubbles quickly for combos!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game8.inst2">Éclatez les bulles rapidement pour des combos !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game8.inst3">אל תתנו לזמן לגמור!</strong></p>
+                <p class="lang-en"><strong data-i18n="game8.inst3">Don't let time run out!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game8.inst3">Ne laissez pas le temps s'écouler !</strong></p>
             </div>
-            <button onclick="startGame()">התחל משחק (Start Game)</button>
+            <button onclick="startGame()">
+                <span class="lang-he" data-i18n="common.startGame">התחל משחק</span>
+                <span class="lang-en" data-i18n="common.startGame">Start Game</span>
+                <span class="lang-fr" data-i18n="common.startGame">Commencer le jeu</span>
+            </button>
         </div>
 
         <div class="header">
-            <div class="stat-box"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
-            <div class="stat-box"><span class="stat-label">Combo</span>קומבו: <span id="combo">0</span></div>
-            <div class="stat-box"><span class="stat-label">Round</span>סיבוב: <span id="round">1</span></div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="common.score">ניקוד:</span>
+                <span class="lang-en" data-i18n="common.score">Score:</span>
+                <span class="lang-fr" data-i18n="common.score">Score :</span>
+                <span id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="game8.combo">קומבו:</span>
+                <span class="lang-en" data-i18n="game8.combo">Combo:</span>
+                <span class="lang-fr" data-i18n="game8.combo">Combo :</span>
+                <span id="combo">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="common.level">סיבוב:</span>
+                <span class="lang-en" data-i18n="common.level">Round:</span>
+                <span class="lang-fr" data-i18n="common.level">Tour :</span>
+                <span id="round">1</span>
+            </div>
         </div>
 
         <div class="timer-bar">
@@ -311,14 +384,40 @@
         </div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
-            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
-            <p><strong>סיבוב שהגעת:</strong> <span id="finalRound">1</span><br><small style="opacity: 0.8;">Round Reached</small></p>
-            <p><strong>קומבו מקסימלי:</strong> <span id="finalCombo">0</span><br><small style="opacity: 0.8;">Max Combo</small></p>
-            <button onclick="restartGame()">שחק שוב (Play Again)</button>
+            <h1>
+                <span class="lang-he" data-i18n="game8.timeUp">הזמן נגמר!</span>
+                <span class="lang-en" data-i18n="game8.timeUp">Time's Up!</span>
+                <span class="lang-fr" data-i18n="game8.timeUp">Temps écoulé !</span>
+            </h1>
+            <p>
+                <strong class="lang-he" data-i18n="common.yourScore">הניקוד שלך:</strong>
+                <strong class="lang-en" data-i18n="common.yourScore">Your Score:</strong>
+                <strong class="lang-fr" data-i18n="common.yourScore">Votre score :</strong>
+                <span id="finalScore">0</span>
+            </p>
+            <p>
+                <strong class="lang-he" data-i18n="common.level">סיבוב:</strong>
+                <strong class="lang-en" data-i18n="common.level">Round:</strong>
+                <strong class="lang-fr" data-i18n="common.level">Tour :</strong>
+                <span id="finalRound">1</span>
+            </p>
+            <p>
+                <strong class="lang-he" data-i18n="game8.combo">קומבו מקסימלי:</strong>
+                <strong class="lang-en" data-i18n="game8.combo">Max Combo:</strong>
+                <strong class="lang-fr" data-i18n="game8.combo">Combo max :</strong>
+                <span id="finalCombo">0</span>
+            </p>
+            <button onclick="restartGame()">
+                <span class="lang-he" data-i18n="common.playAgain">שחק שוב</span>
+                <span class="lang-en" data-i18n="common.playAgain">Play Again</span>
+                <span class="lang-fr" data-i18n="common.playAgain">Rejouer</span>
+            </button>
         </div>
     </div>
 
+    <!-- Load localization FIRST -->
+    <script src="localization.js"></script>
+    
     <script>
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Game Testing Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .test-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .test-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .test-steps {
+            color: #666;
+            line-height: 1.8;
+            margin-left: 20px;
+        }
+
+        .test-steps li {
+            margin: 5px 0;
+        }
+
+        .expected {
+            background: #e8f5e9;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #4caf50;
+        }
+
+        .expected strong {
+            color: #2e7d32;
+        }
+
+        .game-link {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .game-link:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #ccc;
+            margin-right: 10px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        .status-indicator.pass {
+            background: #4caf50;
+            border-color: #4caf50;
+        }
+
+        .status-indicator.fail {
+            background: #f44336;
+            border-color: #f44336;
+        }
+
+        .video-demo {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .video-demo iframe {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .key-display {
+            display: inline-block;
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-weight: bold;
+            margin: 0 3px;
+        }
+
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Hebrew Games - Manual Testing Tool</h1>
+        <p class="subtitle">Follow these tests to verify all games work correctly</p>
+
+        <div class="quick-links">
+            <a href="game1-runner.html" class="game-link" target="_blank">Game 1: Run & Jump</a>
+            <a href="game2-car.html" class="game-link" target="_blank">Game 2: Car</a>
+            <a href="game3-typing.html" class="game-link" target="_blank">Game 3: Typing</a>
+            <a href="game4-falling.html" class="game-link" target="_blank">Game 4: Falling Letters</a>
+            <a href="game5-balloons.html" class="game-link" target="_blank">Game 5: Balloons</a>
+        </div>
+
+        <!-- Game 1 Tests -->
+        <div class="test-section">
+            <h2>🏃 Game 1: Run and Jump</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 1: Target Letter Stays Until Pressed
+                </div>
+                <ol class="test-steps">
+                    <li>Open <a href="game1-runner.html" target="_blank">Game 1</a></li>
+                    <li>Click "Start Game"</li>
+                    <li><strong>DON'T PRESS ANYTHING</strong> - Watch obstacle approach</li>
+                    <li>Press <span class="key-display">Z</span> (WRONG key) - Nothing should happen</li>
+                    <li>Look at target letter (top center of screen)</li>
+                    <li>Press the CORRECT Hebrew key (or its English equivalent)</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Obstacle stays visible until correct key is pressed. Player jumps only when correct key pressed. Score increases.
+                </div>
+            </div>
+
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 2: Invalid Keys Ignored
+                </div>
+                <ol class="test-steps">
+                    <li>Start the game</li>
+                    <li>Press: <span class="key-display">1</span> <span class="key-display">2</span> <span class="key-display">!</span> <span class="key-display">@</span> <span class="key-display">Space</span></li>
+                    <li>Score should NOT change</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Invalid keys do nothing. Score stays at 0.
+                </div>
+            </div>
+
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 3: Mobile Virtual Keyboard
+                </div>
+                <ol class="test-steps">
+                    <li>Open on phone OR resize browser to mobile (375px width)</li>
+                    <li>Virtual Hebrew keyboard should appear at bottom</li>
+                    <li>Tap keys on virtual keyboard</li>
+                    <li>Player should jump when tapping correct letter</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Virtual keyboard visible and functional on mobile.
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 2 Tests -->
+        <div class="test-section">
+            <h2>🚗 Game 2: Hebrew Car</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 4: Car Responds to Correct Lane Keys
+                </div>
+                <ol class="test-steps">
+                    <li>Open <a href="game2-car.html" target="_blank">Game 2</a></li>
+                    <li>Start game and note the 3 control keys shown</li>
+                    <li>Press WRONG keys (numbers, symbols) - car should NOT move</li>
+                    <li>Press the LEFT lane key - car moves left</li>
+                    <li>Press the CENTER lane key - car moves center</li>
+                    <li>Press the RIGHT lane key - car moves right</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Car only responds to the 3 designated lane keys. Wrong keys ignored.
+                </div>
+            </div>
+
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 5: Keys Change Every 5 Seconds
+                </div>
+                <ol class="test-steps">
+                    <li>Note the initial 3 control keys</li>
+                    <li>Wait 5 seconds</li>
+                    <li>Keys should blink and change to new letters</li>
+                    <li>Test that NEW keys now control the lanes</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Control keys change every 5 seconds with blink animation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 4 Tests -->
+        <div class="test-section">
+            <h2>📝 Game 4: Falling Letters</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 6: Letters Stay Until Typed
+                </div>
+                <ol class="test-steps">
+                    <li>Open <a href="game4-falling.html" target="_blank">Game 4</a></li>
+                    <li>Start game and watch letters fall</li>
+                    <li>Press WRONG keys (numbers) - letters keep falling</li>
+                    <li>Type <span class="key-display">A</span> <span class="key-display">S</span> <span class="key-display">D</span> - matching letters disappear with explosion</li>
+                    <li>Score increases when typing correct letters</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Letters only disappear when their matching key is pressed. Wrong keys ignored.
+                </div>
+            </div>
+
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 7: Lives Decrease on Missed Letters
+                </div>
+                <ol class="test-steps">
+                    <li>Let letters fall without typing</li>
+                    <li>When letter hits ground, you lose a life (❤️)</li>
+                    <li>After 3 misses, game over screen appears</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Lives decrease only when letters hit ground, not from wrong key presses.
+                </div>
+            </div>
+        </div>
+
+        <!-- Game 5 Tests -->
+        <div class="test-section">
+            <h2>🎈 Game 5: Balloon Pop</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 8: Balloons Pop Only with Correct Keys
+                </div>
+                <ol class="test-steps">
+                    <li>Open <a href="game5-balloons.html" target="_blank">Game 5</a></li>
+                    <li>Start game and watch balloons float up</li>
+                    <li>Press <span class="key-display">1</span> <span class="key-display">2</span> <span class="key-display">3</span> - balloons keep floating</li>
+                    <li>Type Hebrew letter keys - matching balloons pop</li>
+                    <li>Score increases when popping balloons</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Balloons only pop when correct Hebrew key pressed. Invalid keys ignored.
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Testing -->
+        <div class="test-section">
+            <h2>📱 Mobile Testing (All Games)</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 9: Virtual Keyboard on Mobile
+                </div>
+                <ol class="test-steps">
+                    <li>Open any game on mobile device OR resize browser to 375px width</li>
+                    <li>Virtual Hebrew keyboard appears at bottom of screen</li>
+                    <li>All keys are visible and not cut off</li>
+                    <li>Tapping keys works same as pressing keyboard keys</li>
+                    <li>Game responds correctly to touch input</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Virtual keyboard fully functional, all keys accessible, touch input works.
+                </div>
+            </div>
+
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 10: Responsive Layout
+                </div>
+                <ol class="test-steps">
+                    <li>Test on different screen sizes: 320px, 375px, 768px, 1920px</li>
+                    <li>All UI elements remain visible</li>
+                    <li>Text is readable</li>
+                    <li>Buttons are tapable</li>
+                    <li>No horizontal scrolling</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Games work on all screen sizes without layout issues.
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Switching -->
+        <div class="test-section">
+            <h2>🌍 Language Switching (Games 1-5)</h2>
+            
+            <div class="test-item">
+                <div class="test-title">
+                    <span class="status-indicator" onclick="this.classList.toggle('pass')"></span>
+                    Test 11: Language Buttons Work
+                </div>
+                <ol class="test-steps">
+                    <li>Open any game 1-5</li>
+                    <li>See language buttons in top-left: 🇮🇱 עברית | 🇬🇧 English | 🇫🇷 Français</li>
+                    <li>Click English - all text changes to English</li>
+                    <li>Click French - all text changes to French</li>
+                    <li>Click Hebrew - all text changes to Hebrew and RTL</li>
+                    <li>Language persists when going to another game</li>
+                </ol>
+                <div class="expected">
+                    <strong>✓ Expected:</strong> Language switches immediately. Text direction changes (RTL for Hebrew, LTR for others).
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="test-section" style="background: #e3f2fd; border-left-color: #2196f3;">
+            <h2>📊 Testing Summary</h2>
+            <p style="font-size: 1.1em; line-height: 1.8;">
+                Click the circles next to each test as you complete them.<br>
+                Green = Pass ✓<br>
+                Red = Fail ✗<br>
+                Gray = Not tested yet<br><br>
+                <strong>Total Tests:</strong> 11<br>
+                <strong>Focus:</strong> Key presses work correctly, wrong keys ignored, mobile functional
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Save test status to localStorage
+        document.querySelectorAll('.status-indicator').forEach((indicator, index) => {
+            const saved = localStorage.getItem(`test-${index}`);
+            if (saved === 'pass') indicator.classList.add('pass');
+            if (saved === 'fail') indicator.classList.add('fail');
+            
+            indicator.addEventListener('click', function() {
+                if (this.classList.contains('pass')) {
+                    this.classList.remove('pass');
+                    this.classList.add('fail');
+                    localStorage.setItem(`test-${index}`, 'fail');
+                } else if (this.classList.contains('fail')) {
+                    this.classList.remove('fail');
+                    localStorage.removeItem(`test-${index}`);
+                } else {
+                    this.classList.add('pass');
+                    localStorage.setItem(`test-${index}`, 'pass');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+
+

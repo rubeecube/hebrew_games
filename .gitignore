@@ -13,3 +13,14 @@ Thumbs.db
 *~
 
 .env*.local
+
+# Node modules
+node_modules/
+package-lock.json
+
+# Test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+.jest-cache/

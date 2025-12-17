@@ -209,3 +209,6 @@ For issues or questions about the localization system, please check:
 2. localStorage to verify language preference is saved
 3. Network tab to ensure localization.js loads correctly
 
+
+
+

@@ -19,6 +19,63 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+
+        .lang-selector {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            color: #667eea;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 2000;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         .container {
@@ -345,57 +402,132 @@
     </style>
 </head>
 <body>
+    <div class="lang-selector">
+        <button class="lang-btn active" data-lang="he" onclick="setLanguage('he')">🇮🇱 עברית</button>
+        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 English</button>
+        <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
+    </div>
+    <a href="index.html" class="back-btn">
+        <span class="lang-he" data-i18n="common.back">← חזרה</span>
+        <span class="lang-en" data-i18n="common.back">← Back</span>
+        <span class="lang-fr" data-i18n="common.back">← Retour</span>
+    </a>
+    
     <div class="container">
-        <h1>🎯 מאמן הקלדה עיוורת</h1>
+        <h1>
+            <span class="lang-he" data-i18n="touchtyping.title">🎯 מאמן הקלדה עיוורת</span>
+            <span class="lang-en" data-i18n="touchtyping.title">🎯 Touch Typing Trainer</span>
+            <span class="lang-fr" data-i18n="touchtyping.title">🎯 Entraîneur de frappe au toucher</span>
+        </h1>
 
         <div class="instructions">
-            <h3>📚 הוראות:</h3>
-            <p>
+            <h3>
+                <span class="lang-he" data-i18n="touchtyping.instructions">📚 הוראות:</span>
+                <span class="lang-en" data-i18n="touchtyping.instructions">📚 Instructions:</span>
+                <span class="lang-fr" data-i18n="touchtyping.instructions">📚 Instructions :</span>
+            </h3>
+            <p class="lang-he" data-i18n="touchtyping.instructionText">
                 למד להקליד ללא הסתכלות על המקלדת! התחל משורת הבית (אשדגכעיחלךף) והתקדם לרמות קשות יותר.
                 שים את האצבעות על שורת הבית ועקוב אחר האות המודגשת על המקלדת.
+            </p>
+            <p class="lang-en" data-i18n="touchtyping.instructionText">
+                Learn to type without looking at the keyboard! Start with the home row (אשדגכעיחלךף) and progress to harder levels.
+                Place your fingers on the home row and follow the highlighted letter on the keyboard.
+            </p>
+            <p class="lang-fr" data-i18n="touchtyping.instructionText">
+                Apprenez à taper sans regarder le clavier ! Commencez par la rangée de base (אשדגכעיחלךף) et progressez vers des niveaux plus difficiles.
+                Placez vos doigts sur la rangée de base et suivez la lettre en surbrillance sur le clavier.
             </p>
         </div>
 
         <div class="stats">
             <div class="stat-box">
-                <div class="stat-label">מהירות (תווים/דקה)</div>
+                <div class="stat-label">
+                    <span class="lang-he" data-i18n="touchtyping.speed">מהירות (תווים/דקה)</span>
+                    <span class="lang-en" data-i18n="touchtyping.speed">Speed (chars/min)</span>
+                    <span class="lang-fr" data-i18n="touchtyping.speed">Vitesse (car/min)</span>
+                </div>
                 <div class="stat-value" id="wpm">0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">דיוק</div>
+                <div class="stat-label">
+                    <span class="lang-he" data-i18n="touchtyping.accuracy">דיוק</span>
+                    <span class="lang-en" data-i18n="touchtyping.accuracy">Accuracy</span>
+                    <span class="lang-fr" data-i18n="touchtyping.accuracy">Précision</span>
+                </div>
                 <div class="stat-value" id="accuracy">100%</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">טעויות</div>
+                <div class="stat-label">
+                    <span class="lang-he" data-i18n="touchtyping.errors">טעויות</span>
+                    <span class="lang-en" data-i18n="touchtyping.errors">Errors</span>
+                    <span class="lang-fr" data-i18n="touchtyping.errors">Erreurs</span>
+                </div>
                 <div class="stat-value" id="errors">0</div>
             </div>
             <div class="stat-box">
-                <div class="stat-label">התקדמות</div>
+                <div class="stat-label">
+                    <span class="lang-he" data-i18n="touchtyping.progress">התקדמות</span>
+                    <span class="lang-en" data-i18n="touchtyping.progress">Progress</span>
+                    <span class="lang-fr" data-i18n="touchtyping.progress">Progrès</span>
+                </div>
                 <div class="stat-value" id="progress">0/0</div>
             </div>
         </div>
 
         <div class="lesson-selector">
-            <button class="lesson-btn active" data-level="1">שורת בית</button>
-            <button class="lesson-btn" data-level="2">שורה עליונה</button>
-            <button class="lesson-btn" data-level="3">שורה תחתונה</button>
-            <button class="lesson-btn" data-level="4">כל האותיות</button>
-            <button class="lesson-btn" data-level="5">מילים</button>
-            <button class="lesson-btn" data-level="6">משפטים</button>
+            <button class="lesson-btn active" data-level="1">
+                <span class="lang-he" data-i18n="touchtyping.homeRow">שורת בית</span>
+                <span class="lang-en" data-i18n="touchtyping.homeRow">Home Row</span>
+                <span class="lang-fr" data-i18n="touchtyping.homeRow">Rangée de base</span>
+            </button>
+            <button class="lesson-btn" data-level="2">
+                <span class="lang-he" data-i18n="touchtyping.topRow">שורה עליונה</span>
+                <span class="lang-en" data-i18n="touchtyping.topRow">Top Row</span>
+                <span class="lang-fr" data-i18n="touchtyping.topRow">Rangée supérieure</span>
+            </button>
+            <button class="lesson-btn" data-level="3">
+                <span class="lang-he" data-i18n="touchtyping.bottomRow">שורה תחתונה</span>
+                <span class="lang-en" data-i18n="touchtyping.bottomRow">Bottom Row</span>
+                <span class="lang-fr" data-i18n="touchtyping.bottomRow">Rangée inférieure</span>
+            </button>
+            <button class="lesson-btn" data-level="4">
+                <span class="lang-he" data-i18n="touchtyping.allLetters">כל האותיות</span>
+                <span class="lang-en" data-i18n="touchtyping.allLetters">All Letters</span>
+                <span class="lang-fr" data-i18n="touchtyping.allLetters">Toutes les lettres</span>
+            </button>
+            <button class="lesson-btn" data-level="5">
+                <span class="lang-he" data-i18n="touchtyping.words">מילים</span>
+                <span class="lang-en" data-i18n="touchtyping.words">Words</span>
+                <span class="lang-fr" data-i18n="touchtyping.words">Mots</span>
+            </button>
+            <button class="lesson-btn" data-level="6">
+                <span class="lang-he" data-i18n="touchtyping.sentences">משפטים</span>
+                <span class="lang-en" data-i18n="touchtyping.sentences">Sentences</span>
+                <span class="lang-fr" data-i18n="touchtyping.sentences">Phrases</span>
+            </button>
         </div>
 
         <div class="hand-position">
-            <h3>👐 מיקום ידיים</h3>
+            <h3>
+                <span class="lang-he" data-i18n="touchtyping.handPosition">👐 מיקום ידיים</span>
+                <span class="lang-en" data-i18n="touchtyping.handPosition">👐 Hand Position</span>
+                <span class="lang-fr" data-i18n="touchtyping.handPosition">👐 Position des mains</span>
+            </h3>
             <div class="hands">
                 <div class="hand">
-                    <span>יד ימין: </span>
+                    <span class="lang-he" data-i18n="touchtyping.rightHand">יד ימין: </span>
+                    <span class="lang-en" data-i18n="touchtyping.rightHand">Right Hand: </span>
+                    <span class="lang-fr" data-i18n="touchtyping.rightHand">Main droite : </span>
                     <span class="finger" id="right-pinky">ך</span>
                     <span class="finger" id="right-ring">ל</span>
                     <span class="finger" id="right-middle">ח</span>
                     <span class="finger" id="right-index">י/ע</span>
                 </div>
                 <div class="hand">
-                    <span>יד שמאל: </span>
+                    <span class="lang-he" data-i18n="touchtyping.leftHand">יד שמאל: </span>
+                    <span class="lang-en" data-i18n="touchtyping.leftHand">Left Hand: </span>
+                    <span class="lang-fr" data-i18n="touchtyping.leftHand">Main gauche : </span>
                     <span class="finger" id="left-index">כ/ג</span>
                     <span class="finger" id="left-middle">ד</span>
                     <span class="finger" id="left-ring">ש</span>
@@ -473,8 +605,16 @@
         </div>
 
         <div class="controls">
-            <button class="btn btn-primary" id="startBtn">התחל תרגיל חדש</button>
-            <button class="btn btn-secondary" id="resetBtn">אפס סטטיסטיקות</button>
+            <button class="btn btn-primary" id="startBtn">
+                <span class="lang-he" data-i18n="touchtyping.startExercise">התחל תרגיל חדש</span>
+                <span class="lang-en" data-i18n="touchtyping.startExercise">Start New Exercise</span>
+                <span class="lang-fr" data-i18n="touchtyping.startExercise">Commencer un nouvel exercice</span>
+            </button>
+            <button class="btn btn-secondary" id="resetBtn">
+                <span class="lang-he" data-i18n="touchtyping.resetStats">אפס סטטיסטיקות</span>
+                <span class="lang-en" data-i18n="touchtyping.resetStats">Reset Statistics</span>
+                <span class="lang-fr" data-i18n="touchtyping.resetStats">Réinitialiser les statistiques</span>
+            </button>
         </div>
 
         <div class="message" id="message"></div>
@@ -769,7 +909,29 @@
 
         // Initialize
         startNewExercise();
+        
+        // Update placeholder based on language
+        function updatePlaceholder() {
+            const lang = localStorage.getItem('hebrewGameLang') || 'he';
+            const placeholders = {
+                he: 'התחל להקליד כאן...',
+                en: 'Start typing here...',
+                fr: 'Commencez à taper ici...'
+            };
+            document.getElementById('typingInput').placeholder = placeholders[lang];
+        }
+        
+        // Update placeholder on load
+        updatePlaceholder();
+        
+        // Override the setLanguage function to also update placeholder
+        const originalSetLanguage = window.setLanguage;
+        window.setLanguage = function(lang) {
+            originalSetLanguage(lang);
+            updatePlaceholder();
+        };
     </script>
+    <script src="localization.js"></script>
 </body>
 </html>
 

@@ -207,6 +207,42 @@
             box-shadow: 0 7px 20px rgba(102, 126, 234, 0.6);
         }
 
+        .lang-selector {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 2000;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .lang-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid transparent;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
         .back-btn {
             position: absolute;
             top: 20px;
@@ -291,29 +327,69 @@
 </head>
 <body>
     <div class="game-container" id="gameContainer">
-        <a href="index.html" class="back-btn">← חזרה (Back)</a>
+        <div class="lang-selector">
+            <button class="lang-btn active" data-lang="he" onclick="setLanguage('he')">🇮🇱 עברית</button>
+            <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">🇬🇧 English</button>
+            <button class="lang-btn" data-lang="fr" onclick="setLanguage('fr')">🇫🇷 Français</button>
+        </div>
+        <a href="index.html" class="back-btn">
+            <span class="lang-he" data-i18n="common.back">← חזרה</span>
+            <span class="lang-en" data-i18n="common.back">← Back</span>
+            <span class="lang-fr" data-i18n="common.back">← Retour</span>
+        </a>
         
         <div class="start-screen" id="startScreen">
-            <h1>🧺 תופס אותיות!<br><small style="font-size: 0.5em; opacity: 0.8;">Letter Catcher!</small></h1>
+            <h1>
+                <span class="lang-he" data-i18n="game7.title">🧺 תופס אותיות!</span>
+                <span class="lang-en" data-i18n="game7.title">🧺 Letter Catcher!</span>
+                <span class="lang-fr" data-i18n="game7.title">🧺 Attraper les lettres !</span>
+            </h1>
             <div class="instructions">
-                <p><strong>תפסו את האותיות הירוקות, הימנעו מהאדומות!</strong><br>
-                <small style="opacity: 0.8;">Catch the green letters, avoid the red ones!</small></p>
-                <p><strong>הסל זז אוטומטית כשמקלידים את האות הירוקה!</strong><br>
-                <small style="opacity: 0.8;">The basket moves automatically when you type the green letter!</small></p>
-                <p><strong>אל תתפסו אותיות אדומות - זה יגרום לכם נזק!</strong><br>
-                <small style="opacity: 0.8;">Don't catch red letters - they hurt you!</small></p>
+                <p class="lang-he"><strong data-i18n="game7.inst1">השתמשו במקשי החיצים או A/D כדי להזיז את הסל!</strong></p>
+                <p class="lang-en"><strong data-i18n="game7.inst1">Use arrow keys or A/D to move the basket!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game7.inst1">Utilisez les flèches ou A/D pour déplacer le panier !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game7.inst2">תפסו אותיות ירוקות כדי לקבל נקודות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game7.inst2">Catch green letters to earn points!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game7.inst2">Attrapez les lettres vertes pour gagner des points !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game7.inst3">הימנעו מאותיות אדומות - הן יגרעו נקודות!</strong></p>
+                <p class="lang-en"><strong data-i18n="game7.inst3">Avoid red letters - they subtract points!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game7.inst3">Évitez les lettres rouges - elles soustraient des points !</strong></p>
+                
+                <p class="lang-he"><strong data-i18n="game7.inst4">תפסו 20 אותיות טובות כדי לנצח!</strong></p>
+                <p class="lang-en"><strong data-i18n="game7.inst4">Catch 20 good letters to win!</strong></p>
+                <p class="lang-fr"><strong data-i18n="game7.inst4">Attrapez 20 bonnes lettres pour gagner !</strong></p>
             </div>
-            <button onclick="startGame()">התחל משחק (Start Game)</button>
+            <button onclick="startGame()">
+                <span class="lang-he" data-i18n="common.startGame">התחל משחק</span>
+                <span class="lang-en" data-i18n="common.startGame">Start Game</span>
+                <span class="lang-fr" data-i18n="common.startGame">Commencer le jeu</span>
+            </button>
         </div>
 
         <div class="header">
-            <div class="stat-box"><span class="stat-label">Score</span>ניקוד: <span id="score">0</span></div>
-            <div class="stat-box"><span class="stat-label">Caught</span>נתפסו: <span id="caught">0</span></div>
-            <div class="stat-box"><span class="stat-label">Lives</span>חיים: <span id="lives">❤️❤️❤️</span></div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="common.score">ניקוד:</span>
+                <span class="lang-en" data-i18n="common.score">Score:</span>
+                <span class="lang-fr" data-i18n="common.score">Score :</span>
+                <span id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="game7.good">טובות:</span>
+                <span class="lang-en" data-i18n="game7.good">Good:</span>
+                <span class="lang-fr" data-i18n="game7.good">Bonnes :</span>
+                <span id="caught">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="lang-he" data-i18n="common.lives">חיים:</span>
+                <span class="lang-en" data-i18n="common.lives">Lives:</span>
+                <span class="lang-fr" data-i18n="common.lives">Vies :</span>
+                <span id="lives">❤️❤️❤️</span>
+            </div>
         </div>
 
         <div class="target-display">
-            <div class="target-label">תפסו את: (Catch)</div>
             <div class="target-letter" id="targetLetter">-</div>
         </div>
 
@@ -324,13 +400,34 @@
         <div class="basket" id="basket">🧺</div>
 
         <div class="game-over hidden" id="gameOver">
-            <h1>המשחק נגמר!<br><small style="font-size: 0.6em; opacity: 0.8;">Game Over!</small></h1>
-            <p><strong>הניקוד שלך:</strong> <span id="finalScore">0</span><br><small style="opacity: 0.8;">Your Score</small></p>
-            <p><strong>אותיות שנתפסו:</strong> <span id="finalCaught">0</span><br><small style="opacity: 0.8;">Letters Caught</small></p>
-            <button onclick="restartGame()">שחק שוב (Play Again)</button>
+            <h1>
+                <span class="lang-he" data-i18n="common.gameOver">המשחק נגמר!</span>
+                <span class="lang-en" data-i18n="common.gameOver">Game Over!</span>
+                <span class="lang-fr" data-i18n="common.gameOver">Jeu terminé !</span>
+            </h1>
+            <p>
+                <strong class="lang-he" data-i18n="common.yourScore">הניקוד שלך:</strong>
+                <strong class="lang-en" data-i18n="common.yourScore">Your Score:</strong>
+                <strong class="lang-fr" data-i18n="common.yourScore">Votre score :</strong>
+                <span id="finalScore">0</span>
+            </p>
+            <p>
+                <strong class="lang-he" data-i18n="game7.good">טובות:</strong>
+                <strong class="lang-en" data-i18n="game7.good">Good:</strong>
+                <strong class="lang-fr" data-i18n="game7.good">Bonnes :</strong>
+                <span id="finalCaught">0</span>
+            </p>
+            <button onclick="restartGame()">
+                <span class="lang-he" data-i18n="common.playAgain">שחק שוב</span>
+                <span class="lang-en" data-i18n="common.playAgain">Play Again</span>
+                <span class="lang-fr" data-i18n="common.playAgain">Rejouer</span>
+            </button>
         </div>
     </div>
 
+    <!-- Load localization FIRST -->
+    <script src="localization.js"></script>
+    
     <script>
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         
