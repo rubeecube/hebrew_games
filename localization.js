@@ -226,10 +226,29 @@ function setLanguage(lang) {
     });
     
     // Show selected language elements
-    // Using 'inline' for inline elements (span) and checking for block elements
+    // Detect element type and set appropriate display value
     document.querySelectorAll(`.lang-${lang}`).forEach(el => {
-        // Default to inline for most text elements
-        el.style.display = 'inline';
+        // Get the computed style to check original display value
+        const tagName = el.tagName.toLowerCase();
+        
+        // Block-level elements should be 'block', inline elements should be 'inline'
+        if (tagName === 'p' || tagName === 'div' || tagName === 'h1' || tagName === 'h2' || 
+            tagName === 'h3' || tagName === 'h4' || tagName === 'h5' || tagName === 'h6' ||
+            tagName === 'li' || tagName === 'ul' || tagName === 'ol') {
+            el.style.display = 'block';
+        } else if (tagName === 'span' || tagName === 'strong' || tagName === 'em' || 
+                   tagName === 'a' || tagName === 'button') {
+            el.style.display = 'inline';
+        } else {
+            // Default: try to preserve original display or use inline
+            // Check if parent has display: flex or grid
+            const parent = el.parentElement;
+            if (parent && window.getComputedStyle(parent).display === 'flex') {
+                el.style.display = 'block';
+            } else {
+                el.style.display = 'inline';
+            }
+        }
     });
     
     // Update active button state
