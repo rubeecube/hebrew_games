@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>הקלדה עיוורת - Touch Typing Trainer</title>
+    <title>הקלדה עיוורת - מאמן הקלדה</title>
     <style>
         * {
             margin: 0;
@@ -539,7 +539,7 @@
         <div class="typing-area">
             <div class="text-to-type" id="textToType"></div>
             <div class="input-area">
-                <input type="text" id="typingInput" placeholder="התחל להקליד כאן..." autocomplete="off">
+                <input type="text" id="typingInput" placeholder="" autocomplete="off">
             </div>
         </div>
 
@@ -620,6 +620,9 @@
         <div class="message" id="message"></div>
     </div>
 
+    <!-- Load localization FIRST -->
+    <script src="localization.js"></script>
+    
     <script>
         const lessons = {
             1: { // Home row
@@ -913,25 +916,53 @@
         // Update placeholder based on language
         function updatePlaceholder() {
             const lang = localStorage.getItem('hebrewGameLang') || 'he';
-            const placeholders = {
+            const translations = {
                 he: 'התחל להקליד כאן...',
                 en: 'Start typing here...',
                 fr: 'Commencez à taper ici...'
             };
-            document.getElementById('typingInput').placeholder = placeholders[lang];
+            const input = document.getElementById('typingInput');
+            if (input) {
+                input.placeholder = translations[lang] || translations['he'];
+            }
         }
         
-        // Update placeholder on load
-        updatePlaceholder();
+        // Update title based on language
+        function updateTitle() {
+            const lang = localStorage.getItem('hebrewGameLang') || 'he';
+            const titles = {
+                he: 'הקלדה עיוורת - מאמן הקלדה',
+                en: 'Touch Typing Trainer',
+                fr: 'Entraîneur de frappe au toucher'
+            };
+            document.title = titles[lang] || titles['he'];
+        }
         
-        // Override the setLanguage function to also update placeholder
-        const originalSetLanguage = window.setLanguage;
-        window.setLanguage = function(lang) {
-            originalSetLanguage(lang);
+        // Wait for localization.js to load, then update placeholder and title
+        function initializeLocalization() {
             updatePlaceholder();
-        };
+            updateTitle();
+            
+            // Override setLanguage to update placeholder and title
+            if (window.setLanguage) {
+                const originalSetLanguage = window.setLanguage;
+                window.setLanguage = function(lang) {
+                    originalSetLanguage(lang);
+                    updatePlaceholder();
+                    updateTitle();
+                };
+            }
+        }
+        
+        // Initialize after DOM and localization are ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(initializeLocalization, 100);
+            });
+        } else {
+            setTimeout(initializeLocalization, 100);
+        }
     </script>
-    <script src="localization.js"></script>
 </body>
 </html>
 

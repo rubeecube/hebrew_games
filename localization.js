@@ -67,7 +67,15 @@ const translations = {
         'touchtyping.leftHand': 'יד שמאל:',
         'touchtyping.startExercise': 'התחל תרגיל חדש',
         'touchtyping.resetStats': 'אפס סטטיסטיקות',
-        'touchtyping.placeholder': 'התחל להקליד כאן...'
+        'touchtyping.placeholder': 'התחל להקליד כאן...',
+        'common.back': 'חזרה',
+        'common.startGame': 'התחל משחק',
+        'common.playAgain': 'שחק שוב',
+        'common.gameOver': 'המשחק נגמר!',
+        'common.yourScore': 'הניקוד שלך:',
+        'common.score': 'ניקוד:',
+        'common.lives': 'חיים:',
+        'common.level': 'רמה:'
     },
     en: {
         'index.title': 'Hebrew Typing Games',
@@ -126,7 +134,15 @@ const translations = {
         'touchtyping.leftHand': 'Left Hand:',
         'touchtyping.startExercise': 'Start New Exercise',
         'touchtyping.resetStats': 'Reset Statistics',
-        'touchtyping.placeholder': 'Start typing here...'
+        'touchtyping.placeholder': 'Start typing here...',
+        'common.back': 'Back',
+        'common.startGame': 'Start Game',
+        'common.playAgain': 'Play Again',
+        'common.gameOver': 'Game Over!',
+        'common.yourScore': 'Your Score:',
+        'common.score': 'Score:',
+        'common.lives': 'Lives:',
+        'common.level': 'Level:'
     },
     fr: {
         'index.title': 'Jeux de frappe hébraïque',
@@ -185,7 +201,15 @@ const translations = {
         'touchtyping.leftHand': 'Main gauche :',
         'touchtyping.startExercise': 'Commencer un nouvel exercice',
         'touchtyping.resetStats': 'Réinitialiser les statistiques',
-        'touchtyping.placeholder': 'Commencez à taper ici...'
+        'touchtyping.placeholder': 'Commencez à taper ici...',
+        'common.back': 'Retour',
+        'common.startGame': 'Commencer le jeu',
+        'common.playAgain': 'Rejouer',
+        'common.gameOver': 'Jeu terminé !',
+        'common.yourScore': 'Votre score :',
+        'common.score': 'Score :',
+        'common.lives': 'Vies :',
+        'common.level': 'Niveau :'
     }
 };
 
