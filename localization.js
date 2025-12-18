@@ -228,26 +228,32 @@ function setLanguage(lang) {
     // Show selected language elements
     // Detect element type and set appropriate display value
     document.querySelectorAll(`.lang-${lang}`).forEach(el => {
-        // Get the computed style to check original display value
         const tagName = el.tagName.toLowerCase();
         
-        // Block-level elements should be 'block', inline elements should be 'inline'
+        // Block-level elements should be 'block'
         if (tagName === 'p' || tagName === 'div' || tagName === 'h1' || tagName === 'h2' || 
             tagName === 'h3' || tagName === 'h4' || tagName === 'h5' || tagName === 'h6' ||
-            tagName === 'li' || tagName === 'ul' || tagName === 'ol') {
+            tagName === 'li' || tagName === 'ul' || tagName === 'ol' || tagName === 'section' ||
+            tagName === 'article' || tagName === 'header' || tagName === 'footer' ||
+            tagName === 'nav' || tagName === 'main' || tagName === 'aside') {
             el.style.display = 'block';
-        } else if (tagName === 'span' || tagName === 'strong' || tagName === 'em' || 
-                   tagName === 'a' || tagName === 'button') {
+        } 
+        // Inline elements should be 'inline'
+        else if (tagName === 'span' || tagName === 'strong' || tagName === 'em' || 
+                 tagName === 'b' || tagName === 'i' || tagName === 'u' || tagName === 'small' ||
+                 tagName === 'mark' || tagName === 'del' || tagName === 'ins' ||
+                 tagName === 'sub' || tagName === 'sup' || tagName === 'code') {
             el.style.display = 'inline';
-        } else {
-            // Default: try to preserve original display or use inline
-            // Check if parent has display: flex or grid
-            const parent = el.parentElement;
-            if (parent && window.getComputedStyle(parent).display === 'flex') {
-                el.style.display = 'block';
-            } else {
-                el.style.display = 'inline';
-            }
+        }
+        // Inline-block elements (buttons, links, inputs)
+        else if (tagName === 'button' || tagName === 'a' || tagName === 'input' ||
+                 tagName === 'select' || tagName === 'textarea' || tagName === 'label') {
+            el.style.display = 'inline-block';
+        }
+        // Default: preserve original display or use inline
+        else {
+            // Try to get computed style before we hid it, or use inline as fallback
+            el.style.display = 'inline';
         }
     });
     
